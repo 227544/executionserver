@@ -1,0 +1,54 @@
+<b2x:translation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://schemas.ilog.com/JRules/1.0/Translation ilog/rules/schemas/1/b2x.xsd"
+        xmlns:b2x="http://schemas.ilog.com/JRules/1.0/Translation">
+    <id>c105a71b-38e0-414e-b792-9a800644dd77</id>
+    <class>
+        <businessName>loan.Borrower</businessName>
+        <import>loan.DateUtil</import>
+        <attribute>
+            <name>ssn</name>
+            <getter language="irl"><![CDATA[
+            return this.getSSN();
+            ]]></getter>
+        </attribute>
+        <attribute>
+            <name>age</name>
+            <getter language="irl"><![CDATA[
+            return DateUtil.getAge(this.getBirthDate(), DateUtil.now());
+            ]]></getter>
+        </attribute>
+        <method>
+            <name>getBankruptcyAge</name>
+            <body language="irl"><![CDATA[
+            return DateUtil.getAge(this.latestBankruptcyDate, DateUtil.now());
+            ]]></body>
+        </method>
+    </class>
+    <class>
+        <businessName>loan.Report</businessName>
+        <method>
+            <name>rejectData</name>
+            <parameter type="java.lang.String"/>
+            <body language="irl"><![CDATA[
+            this.setValidData(false); 
+this.addMessage(message);
+            ]]></body>
+        </method>
+        <method>
+            <name>approveLoan</name>
+            <parameter type="java.lang.String"/>
+            <body language="irl"><![CDATA[
+            this.setApproved(true); 
+this.addMessage(message);
+            ]]></body>
+        </method>
+        <method>
+            <name>rejectLoan</name>
+            <parameter type="java.lang.String"/>
+            <body language="irl"><![CDATA[
+            this.setApproved(false); 
+this.addMessage(message);
+            ]]></body>
+        </method>
+    </class>
+</b2x:translation>

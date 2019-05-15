@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17 5655-Y31 5724-X98 5724-Y15 5655-V82                                     -->
+<!-- Copyright IBM Corp. 1987, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+
+
+<project name="Trace display Sample" default="usage" basedir=".">
+
+	<description>How to get a quick access to the execution trace</description>
+
+	<property name="ds.home" location="${basedir}/../../.." />
+    <property name="odm.wlp.scripts.dir" value="${ds.home}/shared/samplesServer/wlp" />
+    <import file="${odm.wlp.scripts.dir}/build.xml"/>
+	<property name="executionserver.home" value="${ds.home}/executionserver"/>
+	<import file="${executionserver.home}/lib/classpath-executionserver.xml"/>
+	<property name="res.url" value="http://${server.host}:${server.port}/res" />
+
+	<!-- print help -->
+	<target name="usage">
+		<echo message="" />
+		<echo message="Usage:" />
+		<echo message="  ant deploy.ruleapp --> build and deploy two rule applications with corresponding rulesets and their xom." />
+		<echo message="  ant execute        --> execute the two rulesets, display the execution trace." />
+		<echo message="  ant clean          --> remove what has been added." />
+	</target>
+
+	<!-- initialize property variable -->
+	<target name="init">
+		<tstamp/>
+		<!-- build -->
+		<property name="data.dir" location="application/data"/>
+		<property name="src.dir" location="application/src"/>
+		<property name="classes.dir" location="application/bin"/>
+ 		<!-- classpath to compile the sample -->
+		<path id="compile.classpath">
+			<pathelement location="${classes.dir}"/>
+			<pathelement location="."/>
+			<fileset dir="${executionserver.home}/lib">
+				<include name="commons-logging-*.jar"/>
+				<include name="httpclient.jar"/>
+				<include name="httpcore.jar"/>
+				<include name="commons-codec-*.jar"/>
+			</fileset>
+			<fileset dir="application/lib">
+				<include name="JSON4J.jar"/>
+			</fileset>
+		</path>
+		<!-- classpath to execute the sample -->
+		<path id="execution.classpath">
+		  <path refid="compile.classpath" />
+		  <pathelement location="${data.dir}"/>
+		</path>
+	</target>
+
+	<target name="build" depends="init">
+		<echo message="Compiling Trace Display Sample"/>
+		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${classes.dir}"/>
+		<!-- Copy the server properties file-->
+		<copy file="${odm.wlp.scripts.dir}/build.properties"
+		      todir="${classes.dir}" />
+		<!-- Copy the data  -->
+		<copy todir="${classes.dir}/data">
+		  <fileset dir="${data.dir}"/>
+		</copy>
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}"   nowarn="true" source="1.7" target="1.7" verbose="off" debug="on" fork="true">
+			<classpath refid="compile.classpath"/>
+		</javac>
+	</target>
+	
+	<!-- Use headless automation builder to deploy decision service RuleApps, one with DE, one with CRE -->
+	<target name="deploy.ruleapp" depends="build,setJVMOption" description="headless deploy decision service built with CRE and DE">
+		<replace file="${executionserver.home}/samples/tracedisplay/server-list.xml" token="@URL@" value="${res.url}"/>
+		<java classname="org.eclipse.core.launcher.Main" fork="true" failonerror="true">
+			 <classpath>
+				<fileset dir="${ds.home}/plugins">
+					<include name="org.eclipse.equinox.launcher_*.jar"/>
+				</fileset>
+			 </classpath>
+			 <jvmarg value="${JVMOption}" />
+			 <arg line='-data "${executionserver.home}/samples/tracedisplay/tempworkspacecre"'/>
+			 <arg line="-application com.ibm.rules.studio.decisionservice.headless "/>
+			 <arg line='-importPath "${executionserver.home}/samples/tracedisplay/trace-xom${path.separator}${executionserver.home}/samples/tracedisplay/trace-rules-cre"'/>
+			 <arg line="-cleanBuild"/>
+			 <arg line="-refresh "/>
+			 <arg line="-clearWorkspace "/>
+			 <arg line="trace-rules-cre?trace-rules-cre" />
+			 <arg line='-serverFile "${executionserver.home}/samples/tracedisplay/server-list.xml"'/>
+		 </java>
+		   <delete failonerror="false"  dir="tempworkspacecre" />
+		   <delete failonerror="false"  dir="${executionserver.home}/samples/tracedisplay/trace-rules-cre/output" />
+		<java classname="org.eclipse.core.launcher.Main" fork="true" failonerror="true">
+			 <classpath>
+				<fileset dir="${ds.home}/plugins">
+					<include name="org.eclipse.equinox.launcher_*.jar"/>
+				</fileset>
+			 </classpath>
+			 <jvmarg value="${JVMOption}" />
+			 <arg line='-data "${executionserver.home}/samples/tracedisplay/tempworkspacede"'/>
+			 <arg line="-application com.ibm.rules.studio.decisionservice.headless "/>
+			 <arg line='-importPath "${executionserver.home}/samples/tracedisplay/trace-xom${path.separator}${executionserver.home}/samples/tracedisplay/trace-rules-de"'/>
+			 <arg line="-cleanBuild"/>
+			 <arg line="-refresh "/>
+			 <arg line="-clearWorkspace "/>
+			 <arg line="trace-rules-de?trace-rules-de" />
+			 <arg line='-serverFile "${executionserver.home}/samples/tracedisplay/server-list.xml"'/>
+		 </java>
+		   <delete failonerror="false"  dir="tempworkspacede" />
+		   <delete failonerror="false"  dir="${executionserver.home}/samples/tracedisplay/trace-rules-de/output" />
+	</target>
+		
+	<!-- The arguments of the JavaClient class are:                                  -->
+	<!--  Execute idExecution <ruleapp> <ruleset> <inputParameters> <outputFileName> -->
+	<target name="execute" depends="build" description="Execute the rulesets">
+	      <mkdir dir="output"/>
+		  <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+				<classpath>
+					<path refid="execution.classpath"/>
+				</classpath>
+				<arg line="Execute idCre trace_rules_cre trace_rules_creRuleset paramscre.xml rulescre"/>
+			</java>
+		  <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+				<classpath>
+					<path refid="execution.classpath"/>
+				</classpath>
+				<arg line="Execute idDe trace_rules_de trace_rules_deRuleset paramsde.xml rulesde"/>
+			</java>
+		  <antcall target="displayTrace" />
+	</target>
+	
+	<!-- Remove the ruleapps and the xom                                              -->
+	<!-- The arguments of the JavaClient class are:                                   -->
+	<!--  Clean <ruleapp> [xom]                                                       -->
+	<target name="clean" depends="build" description="Remove the ruleapps and the xom">
+	  <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+			<classpath>
+				<path refid="execution.classpath"/>
+			</classpath>
+			<arg value="Clean"/>
+			<arg value="trace_rules_cre"/>
+			<arg value="trace-xom.zip"/>
+		</java>
+	    <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+				<classpath>
+					<path refid="execution.classpath"/>
+				</classpath>
+				<arg value="Clean"/>
+				<arg value="trace_rules_de"/>
+				<arg value=""/>
+			</java>
+	  <delete failonerror="false"  dir="${classes.dir}" />
+	  <delete failonerror="false"  dir="output" />
+	</target>
+
+	<!-- Utilities -->
+	<!-- Display the execution trace from two files fully or only the differences    -->
+	<!-- The arguments of the JavaClient class are:                                  -->
+	<!--  Display <idExecution> <file1> <file2> <parallel|sequential> [all]          -->
+	<target name="displayTrace" depends="build" >
+		  <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+				<classpath>
+					<path refid="execution.classpath"/>
+				</classpath>
+				<arg line="Display rulescreexec.txt rulesdeexec.txt parallel all"/>
+			</java>
+		  <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+				<classpath>
+					<path refid="execution.classpath"/>
+				</classpath>
+				<arg line="Display rulescreexec.txt rulesdeexec.txt parallel"/>
+			</java>
+	</target>
+</project>

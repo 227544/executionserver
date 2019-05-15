@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17 5655-Y31 5724-X98 5724-Y15 5655-V82                                     -->
+<!-- Copyright IBM Corp. 1987, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+
+
+<project default="usage" basedir=".">
+  <description>How to Automate Ruleset Management</description>
+  <property name="ds.home" location="${basedir}/../../.." />
+
+  <target name="usage">
+    <ant antfile="wlp/build.xml" target="usage" inheritAll="false" >
+    <property name="ds.home" value="${ds.home}" />
+  </ant>
+  </target>
+
+  <target name="build">
+    <ant antfile="wlp/build.xml" target="clean" inheritAll="false" >
+      <property name="ds.home" value="${ds.home}" />
+    </ant>
+    <ant antfile="wlp/build.xml" target="build" inheritAll="false" >
+      <property name="ds.home" value="${ds.home}" />
+    </ant>
+  </target>
+
+  <target name="displayruleapp" description="display RuleApp list">
+    <ant antfile="wlp/build.xml" target="displayruleapp" inheritAll="false" >
+      <property name="ds.home" value="${ds.home}" />
+    </ant>
+  </target>
+
+  <target name="run" description="check ruleset validity">
+    <ant antfile="wlp/build.xml" target="run" inheritAll="false" >
+      <property name="ds.home" value="${ds.home}" />
+    </ant>
+  </target>
+
+  <target name="clean" description="delete the compiled classes">
+    <ant antfile="wlp/build.xml" target="clean" inheritAll="false" >
+      <property name="ds.home" value="${ds.home}" />
+    </ant>
+  </target>
+</project>

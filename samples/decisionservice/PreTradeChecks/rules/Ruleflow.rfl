@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ilog.rules.studio.model.ruleflow:RuleFlow xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ilog.rules.studio.model.ruleflow="http://ilog.rules.studio/model/ruleflow.ecore">
+  <eAnnotations source="ilog.rules.custom_properties">
+    <details key="historyVersion" value="false"/>
+    <details key="editable" value="true"/>
+    <details key="modified" value="false"/>
+    <details key="creationDate" value="16 Jul 2004 09:17:23 GMT"/>
+    <details key="lastModificationDate" value="26 Jul 2004 08:54:11 GMT"/>
+  </eAnnotations>
+  <name>Ruleflow</name>
+  <uuid>a5867dca-7ad6-421b-bbff-58cb4928a709</uuid>
+  <locale>en_US</locale>
+  <categories>any</categories>
+  <rfModel>
+<Ruleflow xmlns="http://schemas.ilog.com/Rules/7.0/Ruleflow">
+  <Body>
+    <TaskList>
+      <StartTask Identifier="task_4">
+        <Actions Language="irl"><![CDATA[
+reportParameter = new ibm.com.Order();
+reportParameter.id=orderParameter.id;
+reportParameter.stock=orderParameter.stock;
+reportParameter.amount= orderParameter.amount;
+reportParameter.exchange=orderParameter.exchange;
+reportParameter.currency=orderParameter.currency;
+reportParameter.destination=orderParameter.destination;
+reportParameter.action=orderParameter.action;
+reportParameter.securityType=orderParameter.securityType;
+reportParameter.dateTime=orderParameter.dateTime;
+reportParameter.sector=orderParameter.sector;
+reportParameter.status="Accepted";
+]]></Actions>
+      </StartTask>
+      <RuleTask ExecutionMode="RetePlus" ExitCriteria="None" Identifier="CheckCustomerName" Ordering="Default">
+        <RuleList>
+          <Package Name="CheckCustomerName"/>
+        </RuleList>
+      </RuleTask>
+      <RuleTask ExecutionMode="RetePlus" ExitCriteria="None" Identifier="CheckAmount" Ordering="Default">
+        <RuleList>
+          <Package Name="CheckAmount"/>
+        </RuleList>
+      </RuleTask>
+      <RuleTask ExecutionMode="RetePlus" ExitCriteria="None" Identifier="CheckCurrency" Ordering="Default">
+        <RuleList>
+          <Package Name="CheckCurrency"/>
+        </RuleList>
+      </RuleTask>
+      <RuleTask ExecutionMode="RetePlus" ExitCriteria="None" Identifier="CheckStock" Ordering="Default">
+        <RuleList>
+          <Package Name="CheckStock"/>
+        </RuleList>
+      </RuleTask>
+      <StopTask Identifier="task_5"/>
+    </TaskList>
+    <NodeList>
+      <TaskNode Identifier="node_0" Task="task_4"/>
+      <TaskNode Identifier="node_1" Task="CheckCustomerName"/>
+      <TaskNode Identifier="node_2" Task="CheckAmount"/>
+      <TaskNode Identifier="node_3" Task="CheckCurrency"/>
+      <TaskNode Identifier="node_4" Task="CheckStock"/>
+      <TaskNode Identifier="node_5" Task="task_5"/>
+    </NodeList>
+    <TransitionList>
+      <Transition Identifier="transition_0" Source="node_0" Target="node_1"/>
+      <Transition Identifier="transition_1" Source="node_1" Target="node_2"/>
+      <Transition Identifier="transition_2" Source="node_2" Target="node_3"/>
+      <Transition Identifier="transition_3" Source="node_3" Target="node_4"/>
+      <Transition Identifier="transition_4" Source="node_4" Target="node_5"/>
+    </TransitionList>
+  </Body>
+  <Resources>
+    <ResourceSet Locale="en_US">
+      <Data Name="node_3#height">38.0</Data>
+      <Data Name="node_2#height">38.0</Data>
+      <Data Name="node_0#height">21.0</Data>
+      <Data Name="node_4#x">79.018555</Data>
+      <Data Name="node_4#name">node_4</Data>
+      <Data Name="node_4#y">354.0</Data>
+      <Data Name="node_3#width">122.69336</Data>
+      <Data Name="node_3#y">266.0</Data>
+      <Data Name="node_3#name">node_3</Data>
+      <Data Name="node_1#name">node_1</Data>
+      <Data Name="node_3#x">79.018555</Data>
+      <Data Name="node_1#width">158.03711</Data>
+      <Data Name="node_0#width">21.0</Data>
+      <Data Name="node_0#name">node_0</Data>
+      <Data Name="node_5#height">23.0</Data>
+      <Data Name="node_2#name">node_2</Data>
+      <Data Name="node_2#width">115.36914</Data>
+      <Data Name="node_5#name">node_5</Data>
+      <Data Name="node_5#width">23.0</Data>
+      <Data Name="node_0#y">10.5</Data>
+      <Data Name="node_0#x">79.018555</Data>
+      <Data Name="node_4#height">38.0</Data>
+      <Data Name="node_4#width">104.02539</Data>
+      <Data Name="node_1#x">79.018555</Data>
+      <Data Name="node_1#y">90.0</Data>
+      <Data Name="node_1#height">38.0</Data>
+      <Data Name="node_2#x">79.018555</Data>
+      <Data Name="node_2#y">178.0</Data>
+      <Data Name="node_5#y">434.5</Data>
+      <Data Name="node_5#x">79.018555</Data>
+    </ResourceSet>
+  </Resources>
+  <Properties>
+    <imports><![CDATA[use orderParameter;
+use reportParameter;
+]]></imports>
+  </Properties>
+</Ruleflow></rfModel>
+</ilog.rules.studio.model.ruleflow:RuleFlow>

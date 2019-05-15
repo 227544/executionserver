@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.ibm.rules.studio.model.decisionservice:Operation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:com.ibm.rules.studio.model.decisionservice="http://com.ibm.rules.studio/model/decisionservice.ecore" rulesetName="trace_rules_deRuleset" usingRuleflow="true" ruleflowName="loanvalidation" targetRuleProjectName="trace-rules-de">
+  <name>trace-rules-deOperation</name>
+  <uuid>5fd28b3b-4ecb-4757-976c-d7dd61b3daaa</uuid>
+  <referencedVariables variableName="borrower" variableSetName="trace-rules-deParameters">
+    <variableSet href="../rules/trace-rules-deParameters.var#039074c9-3a5c-4bd6-9742-75727a161346"/>
+  </referencedVariables>
+  <referencedVariables variableName="loan" variableSetName="trace-rules-deParameters" direction="IN_OUT">
+    <variableSet href="../rules/trace-rules-deParameters.var#039074c9-3a5c-4bd6-9742-75727a161346"/>
+  </referencedVariables>
+  <referencedVariables variableName="report" variableSetName="trace-rules-deParameters" direction="OUT">
+    <variableSet href="../rules/trace-rules-deParameters.var#039074c9-3a5c-4bd6-9742-75727a161346"/>
+  </referencedVariables>
+  <ruleflow href="../rules/loanvalidation.rfl#889479a0-2047-4da4-bc4b-6ceb6f96e26f"/>
+  <targetRuleProject href="../../trace-rules-de#3d5a2e43-cef7-4d0f-97b2-cd8d23506ddb"/>
+</com.ibm.rules.studio.model.decisionservice:Operation>

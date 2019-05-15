@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ilog.rules.studio.model.base:VariableSet xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ilog.rules.studio.model.base="http://ilog.rules.studio/model/base.ecore">
+  <name>PreTradeChecksParameters</name>
+  <uuid>3175196f-2028-4119-a59b-bea50bd884f2</uuid>
+  <variables name="orderParameter" type="ibm.com.Order" verbalization="order"/>
+  <variables name="reportParameter" type="ibm.com.Order" verbalization="report"/>
+  <variables name="customerParameter" type="ibm.com.Customer" verbalization="customer"/>
+</ilog.rules.studio.model.base:VariableSet>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  Licensed Materials - Property of IBM
+  5724X98 5724Y15 5655V82 5724X99 5724Y16 5655V89 5725B69 5655W88 5725C52 5655W90 5655Y31
+  Copyright IBM Corp. 1987, 2017 All Rights Reserved
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+
+-->
+
+<project default="usage" basedir="..">
+  <property name="executionserver.home" location="${basedir}"/>
+
+  <import file="${executionserver.home}/lib/classpath-executionserver.xml"/>
+  <taskdef resource="res-tasks.properties" >
+    <classpath refid="executionserver.setup.classpath" />
+  </taskdef>
+  
+  <target name="setup">
+    <property name="xu.in" value=""/>
+    <property name="xu.out" value=""/>
+    <property name="xu.config.in" value=""/>
+    <property name="xu.config.out" value=""/>
+    <property name="console.war.in" value=""/>
+    <property name="console.war.out" value=""/>
+    <property name="console.ear.in" value=""/>
+    <property name="console.ear.out" value=""/>
+    <property name="persistence.type" value=""/>
+    <property name="persistence.jdbc.user" value=""/>
+    <property name="persistence.jdbc.password" value=""/>
+    <property name="persistence.jdbc.crypted.password.enabled" value=""/>
+    <property name="persistence.jdbc.driver" value=""/>
+    <property name="persistence.jdbc.url" value=""/>
+    <property name="persistence.datasource.jndi" value=""/>
+    <property name="persistence.file.directory" value=""/>
+    <property name="xom.persistence.type" value=""/>
+    <property name="xom.persistence.jdbc.user" value=""/>
+    <property name="xom.persistence.jdbc.password" value=""/>
+    <property name="xom.persistence.jdbc.crypted.password.enabled" value=""/>
+    <property name="xom.persistence.jdbc.driver" value=""/>
+    <property name="xom.persistence.jdbc.url" value=""/>
+    <property name="xom.persistence.datasource.jndi" value=""/>
+    <property name="xom.persistence.file.directory" value=""/>
+    <property name="xom.persistence.lazyload" value=""/>
+    <property name="management.protocol" value=""/>
+    <property name="management.tcpip.port" value=""/>
+    <property name="management.tcpip.timeout" value=""/>
+    <property name="compiledArchivesCache.properties" value=""/>
+    <property name="xu.plugins" value=""/>
+    <!-- internal usage only -->
+    <property name="persistence.file.rulesetarchiveexpanded" value=""/>
+    <!-- internal usage only -->
+    <property name="connectionmanager.properties" value=""/>
+    <property name="session.mode" value=""/>
+
+    <res-setup xuInput="${xu.in}"
+               xuOutput="${xu.out}"
+               xuConfigInput = "${xu.config.in}"
+               xuConfigOutput = "${xu.config.out}"
+               consoleEARInput="${console.ear.in}"
+               consoleEAROutput="${console.ear.out}"
+               consoleWARInput="${console.war.in}"
+               consoleWAROutput="${console.war.out}">
+       <property name="persistence.type" value="${persistence.type}" />
+       <property name="persistence.jdbc.user" value="${persistence.jdbc.user}" />
+       <property name="persistence.jdbc.crypted.password.enabled" value="${persistence.jdbc.crypted.password.enabled}" />
+       <property name="persistence.jdbc.password" value="${persistence.jdbc.password}" />
+       <property name="persistence.jdbc.driver" value="${persistence.jdbc.driver}" />
+       <property name="persistence.jdbc.url" value="${persistence.jdbc.url}" />
+       <property name="persistence.datasource.jndi" value="${persistence.datasource.jndi}" />
+       <property name="persistence.file.directory" value="${persistence.file.directory}" />
+       <property name="persistence.file.rulesetarchiveexpanded" value="${persistence.file.rulesetarchiveexpanded}"/>
+       <property name="xom.persistence.type" value="${xom.persistence.type}" />
+       <property name="xom.persistence.jdbc.user" value="${xom.persistence.jdbc.user}" />
+       <property name="xom.persistence.jdbc.crypted.password.enabled" value="${xom.persistence.jdbc.crypted.password.enabled}" />
+       <property name="xom.persistence.jdbc.password" value="${xom.persistence.jdbc.password}" />
+       <property name="xom.persistence.jdbc.driver" value="${xom.persistence.jdbc.driver}" />
+       <property name="xom.persistence.jdbc.url" value="${xom.persistence.jdbc.url}" />
+       <property name="xom.persistence.datasource.jndi" value="${xom.persistence.datasource.jndi}" />
+       <property name="xom.persistence.file.directory" value="${xom.persistence.file.directory}" />
+       <property name="xom.persistence.lazyload" value="${xom.persistence.lazyload}" />
+       <property name="connectionmanager.properties" value="${connectionmanager.properties}"/>
+       <property name="session.mode" value="${session.mode}"/>
+       <property name="management.protocol" value="${management.protocol}"/>
+       <property name="management.tcpip.port" value="${management.tcpip.port}"/>
+       <property name="management.tcpip.timeout" value="${management.tcpip.timeout}"/>
+       <property name="compiledArchivesCache.properties" value="${compiledArchivesCache.properties}"/>
+       <property name="plugins" value="${xu.plugins}"/>
+    </res-setup>
+  </target>
+
+ 
+ <target name="setup-metering">
+        <property name="xu.config.in" value=""/>
+        <property name="xu.config.out" value=""/>
+        <property name="xu.in" value=""/>
+        <property name="xu.out" value=""/>
+        <property name="metering.war.in" value=""/>
+        <property name="metering.war.out" value=""/>
+        <property name="metering.enable" value="true"/>
+        <property name="metering.send.usages" value="true"/>
+        <property name="metering.server.url" value="https://hybridconnect-api.ng.bluemix.net"/>
+        <property name="metering.api.key" value=""/>
+        <property name="metering.instance.identifier" value=""/>
+        <property name="metering.host.name" value=""/>
+        <property name="metering.install.directory" value=""/>
+        <property name="metering.environment.type" value=""/>
+        <property name="metering.source.url" value=""/>
+        <property name="metering.log.usages" value=""/>
+      <property name="metering.application.level.id" value=""/>
+      <property name="metering.application.level.name" value=""/>
+      <property name="metering.application.level.name.de" value=""/>
+      <property name="metering.application.level.name.es" value=""/>
+      <property name="metering.application.level.name.fr" value=""/>
+      <property name="metering.application.level.name.it" value=""/>
+      <property name="metering.application.level.name.ja" value=""/>
+      <property name="metering.application.level.name.ko" value=""/>
+      <property name="metering.application.level.name.nl" value=""/>
+      <property name="metering.application.level.name.pl" value=""/>
+    <property name="metering.application.level.name.pt-BR" value=""/>
+      <property name="metering.application.level.name.ru" value=""/>
+      <property name="metering.application.level.name.sv" value=""/>
+    <property name="metering.application.level.name.zh-TW" value=""/>
+    <property name="metering.application.level.name.zh" value=""/>
+      <property name="metering.environment.level.id" value=""/>
+      <property name="metering.environment.level.name" value=""/>
+      <property name="metering.environment.level.name.de" value=""/>
+      <property name="metering.environment.level.name.es" value=""/>
+      <property name="metering.environment.level.name.fr" value=""/>
+      <property name="metering.environment.level.name.it" value=""/>
+      <property name="metering.environment.level.name.ja" value=""/>
+      <property name="metering.environment.level.name.ko" value=""/>
+      <property name="metering.environment.level.name.nl" value=""/>
+      <property name="metering.environment.level.name.pl" value=""/>
+    <property name="metering.environment.level.name.pt-BR" value=""/>
+      <property name="metering.environment.level.name.ru" value=""/>
+      <property name="metering.environment.level.name.sv" value=""/>
+    <property name="metering.environment.level.name.zh-TW" value=""/>
+    <property name="metering.environment.level.name.zh" value=""/>
+        <combinaison-check prop1="xu.config.in" prop2="xu.config.out"/>
+        <combinaison-check prop1="xu.in" prop2="xu.out"/>
+        <combinaison-check prop1="metering.war.in" prop2="metering.war.out"/>
+        <res-setup 
+                   xuInput="${xu.in}"
+                   xuOutput="${xu.out}"
+                   xuConfigInput = "${xu.config.in}"
+                   xuConfigOutput = "${xu.config.out}"
+                   meteringWARInput="${metering.war.in}"
+                   meteringWARoutput="${metering.war.out}">
+            <property name="metering.enable" value="${metering.enable}"/>
+            <property name="metering.send.usages" value="${metering.send.usages}"/>
+            <property name="metering.server.url" value="${metering.server.url}"/>
+            <property name="metering.api.key" value="${metering.api.key}"/>
+            <property name="metering.instance.identifier" value="${metering.instance.identifier}"/>
+            <property name="metering.host.name" value="${metering.host.name}"/>
+            <property name="metering.install.directory" value="${metering.install.directory}"/>
+            <property name="metering.environment.type" value="${metering.environment.type}"/>
+            <property name="metering.source.url" value="${metering.source.url}"/>
+            <property name="metering.log.usages" value="${metering.log.usages}"/>
+            <property name="metering.application.level.id" value="${metering.application.level.id}"/>
+            <property name="metering.application.level.name" value="${metering.application.level.name}"/>
+            <property name="metering.application.level.name.de" value="${metering.application.level.name.de}"/>
+            <property name="metering.application.level.name.es" value="${metering.application.level.name.es}"/>
+            <property name="metering.application.level.name.fr" value="${metering.application.level.name.fr}"/>
+            <property name="metering.application.level.name.it" value="${metering.application.level.name.it}"/>
+            <property name="metering.application.level.name.ja" value="${metering.application.level.name.ja}"/>
+            <property name="metering.application.level.name.ko" value="${metering.application.level.name.ko}"/>
+            <property name="metering.application.level.name.nl" value="${metering.application.level.name.nl}"/>
+            <property name="metering.application.level.name.pl" value="${metering.application.level.name.pl}"/>
+            <property name="metering.application.level.name.pt-BR" value="${metering.application.level.name.pt-BR}"/>
+            <property name="metering.application.level.name.ru" value="${metering.application.level.name.ru}"/>
+            <property name="metering.application.level.name.sv" value="${metering.application.level.name.sv}"/>
+            <property name="metering.application.level.name.zh-TW" value="${metering.application.level.name.zh-TW}"/>
+            <property name="metering.application.level.name.zh" value="${metering.application.level.name.zh}"/>
+            <property name="metering.environment.level.id" value="${metering.environment.level.id}"/>
+            <property name="metering.environment.level.name" value="${metering.environment.level.name}"/>
+            <property name="metering.environment.level.name.de" value="${metering.environment.level.name.de}"/>
+            <property name="metering.environment.level.name.es" value="${metering.environment.level.name.es}"/>
+            <property name="metering.environment.level.name.fr" value="${metering.environment.level.name.fr}"/>
+            <property name="metering.environment.level.name.it" value="${metering.environment.level.name.it}"/>
+            <property name="metering.environment.level.name.ja" value="${metering.environment.level.name.ja}"/>
+            <property name="metering.environment.level.name.ko" value="${metering.environment.level.name.ko}"/>
+            <property name="metering.environment.level.name.nl" value="${metering.environment.level.name.nl}"/>
+            <property name="metering.environment.level.name.pl" value="${metering.environment.level.name.pl}"/>
+            <property name="metering.environment.level.name.pt-BR" value="${metering.environment.level.name.pt-BR}"/>
+            <property name="metering.environment.level.name.ru" value="${metering.environment.level.name.ru}"/>
+            <property name="metering.environment.level.name.sv" value="${metering.environment.level.name.sv}"/>
+            <property name="metering.environment.level.name.zh-TW" value="${metering.environment.level.name.zh-TW}"/>
+            <property name="metering.environment.level.name.zh" value="${metering.environment.level.name.zh}"/>
+        </res-setup>
+  </target>
+ 
+  <target name="usage">
+    <echo>Rules Execution Server setup tool.
+
+    Ant tasks:
+       - usage
+       - setup : Creates a new RES Console and/or Execution Unit.
+       - setup-metering: Enable/Disable metering feature in the Execution Unit.
+
+    Ant Properties:
+       - xu.in : path to input XU .rar
+       - xu.out : path to output XU .rar
+       - xu.config.in : path to input XU ra.xml
+       - xu.config.out : path to output XU ra.xml
+       - compiledArchivesCache.properties : max. number of compiled archives in the cache, and path to the XUs compiled archives cache
+       - console.ear.in : path to input management .ear
+       - console.ear.out : path to output management .ear
+       - console.war.in: path to input RES Console .war
+       - console.war.out: path to output RES Console .war
+
+       - persistence.type : file | datasource | jdbc
+       - persistence.file.directory : Where the path to the top directory containing rulesets is.
+       - persistence.jdbc.user : Login to use with the database connection.
+       - persistence.jdbc.password : A password to use with the database connection.
+       - persistence.jdbc.crypted.password.enabled : Password will be crypted in the XU configuration file
+       - persistence.jdbc.url :  The JDBC URL to establish a connection with the database.
+       - persistence.jdbc.driver : A driver implementation class to establish a connection with the database.
+       - persistence.datasource.jndi : The JNDI name of the datasource.
+
+       - xom.persistence.type : file | datasource | jdbc
+       - xom.persistence.file.directory : Where the path to the top directory containing rulesets is.
+       - xom.persistence.jdbc.user : Login to use with the database connection.
+       - xom.persistence.jdbc.password : A password to use with the database connection.
+       - xom.persistence.jdbc.crypted.password.enabled : Password will be crypted in the XU configuration file
+       - xom.persistence.jdbc.url :  The JDBC URL to establish a connection with the database.
+       - xom.persistence.jdbc.driver : A driver implementation class to establish a connection with the database.
+       - xom.persistence.datasource.jndi : The JNDI name of the datasource.
+       - xom.persistence.lazyload : The lazy loading capabilities activation of the Managed XOM.
+
+       - management.protocol: jmx | tcpip. If no value is provided, jmx is assumed. 
+       - management.protocol.tcpip.port: if management protocol is tcpip, the port number on which the management server is running. If no value is provided, 1883 is assumed.
+       - management.protocol.tcpip.timeout: the timeout (in second) to wait for managed XU responses when using the tcpip management protocol.
+
+       - metering.enable: true | false. Enable or disable metering.
+       - metering.send.usages: true | false. Enable or disable the send of the usage.
+       - metering.server.url: Valid URL. Mandatory Value. Server URL of the usage server.
+       - metering.api.key: Valid API Key. Mandatory Value. API Key generated from Bluemix.
+       - metering.instance.identifier: String. Optional. Identifier of your instance.
+       - metering.host.name: String. Optional. Host name that send the metering.
+       - metering.install.directory:  String. Optional. Directory of the emitter of this request.
+       - metering.environment.type: String. Information about the environment from where you send the metering.
+       - metering.source.url: Valid URL. Server Source that emit the metrics values.
+       - metering.log.usages: true | false. Enable or disable usage reporting.
+     
+    Example:
+       ant -Dxu.in=../applicationservers/WebSphere85/jrules-res-xu-WAS85.rar -Dxu.out=myxu.rar -Dconsole.ear.in=../applicationservers/WebSphere85/jrules-res-management-WAS85.ear -Dconsole.ear.out=mymanagement.ear -Dpersistence.type=file -f ressetup.xml setup
+       (Creates a new XU .rar and management .ear using file persistence)
+
+       For metering:
+          ant -f ressetup.xml -Dxu.config.in=ra.xml -Dxu.config.out=ra-out.xml -Dmetering.api.key=myapi setup-metering
+          (Creates a new ra-out.xml with metering enabled)
+
+     </echo>
+  </target>
+  
+  <macrodef name="check-property-value">
+    <attribute name="prop1"/>
+    <attribute name="prop2"/>
+    <sequential>
+       <fail message="Use of parameter @{prop2} required to set parameter @{prop1}.">
+          <condition>
+            <and>
+              <equals arg1="${@{prop1}}" arg2=""/>
+              <not>
+                <equals arg1="${@{prop2}}" arg2=""/>
+              </not>
+            </and>
+          </condition>
+        </fail> 
+    </sequential>
+  </macrodef>
+
+ <macrodef name="combinaison-check">
+    <attribute name="prop1"/>
+    <attribute name="prop2"/>
+    <sequential>
+      <check-property-value prop1="@{prop1}" prop2="@{prop2}"/>
+      <check-property-value prop1="@{prop2}" prop2="@{prop1}"/>
+    </sequential>
+  </macrodef>
+</project>

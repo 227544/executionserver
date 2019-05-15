@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model.brl:ActionRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model.brl="http://ilog.rules.studio/model/brl.ecore">
+  <name>checkZipcode</name>
+  <uuid>_1LRBUCa1EdqlZ-2RRwonPw</uuid>
+  <status>new</status>
+  <locale>en_US</locale>
+  <definition><![CDATA[definitions 
+    set 'zip length' to 5;
+if
+    the zip code of the address of 'the borrower' is null or
+    the length of the zip code of the address of 'the borrower' does not equal 'zip length'
+then 
+    in 'the loan report' , reject the data with the message "The borrower's Zip Code should have " + 'zip length' + " digits"; 
+
+]]></definition>
+</model.brl:ActionRule>

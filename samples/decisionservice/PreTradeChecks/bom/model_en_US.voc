@@ -1,0 +1,122 @@
+# Vocabulary Properties
+uuid = aa90efe7-05e6-4357-b678-0bc88615ad3b
+
+# ibm.com.ActionType
+ibm.com.ActionType#concept.label = action type
+ibm.com.ActionType.BUY#instance.label = BUY
+ibm.com.ActionType.SELL#instance.label = SELL
+ibm.com.ActionType.fromValue(java.lang.String)#phrase.navigation = action type.fromValue({0})
+ibm.com.ActionType.value()#phrase.navigation = {this}.value()
+ibm.com.ActionType.valueOf(java.lang.String)#phrase.navigation = action type.valueOf({0})
+ibm.com.ActionType.values()#phrase.navigation = action type.values()
+
+# ibm.com.Currency
+ibm.com.Currency#concept.label = currency
+ibm.com.Currency.EURO#instance.label = EURO
+ibm.com.Currency.JP_REN#instance.label = JP_REN
+ibm.com.Currency.POUND#instance.label = POUND
+ibm.com.Currency.PRCRMB#instance.label = PRCRMB
+ibm.com.Currency.SG_DOLLAR#instance.label = SG_DOLLAR
+ibm.com.Currency.US_DOLLAR#instance.label = US_DOLLAR
+ibm.com.Currency.fromValue(java.lang.String)#phrase.navigation = currency.fromValue({0})
+ibm.com.Currency.value()#phrase.navigation = {this}.value()
+ibm.com.Currency.valueOf(java.lang.String)#phrase.navigation = currency.valueOf({0})
+ibm.com.Currency.values()#phrase.navigation = currency.values()
+
+# ibm.com.Customer
+ibm.com.Customer#concept.label = customer
+ibm.com.Customer.bankStockPosition#phrase.action = set the bank stock position of {this} to {bank stock position}
+ibm.com.Customer.bankStockPosition#phrase.navigation = {bank stock position} of {this}
+ibm.com.Customer.bondPosition#phrase.action = set the bond position of {this} to {bond position}
+ibm.com.Customer.bondPosition#phrase.navigation = {bond position} of {this}
+ibm.com.Customer.currency#phrase.action = set the currency of {this} to {currency}
+ibm.com.Customer.currency#phrase.navigation = {currency} of {this}
+ibm.com.Customer.currentValue#phrase.action = set the current value of {this} to {current value}
+ibm.com.Customer.currentValue#phrase.navigation = {current value} of {this}
+ibm.com.Customer.futurPosition#phrase.action = set the futur position of {this} to {futur position}
+ibm.com.Customer.futurPosition#phrase.navigation = {futur position} of {this}
+ibm.com.Customer.initialValue#phrase.action = set the initial value of {this} to {initial value}
+ibm.com.Customer.initialValue#phrase.navigation = {initial value} of {this}
+ibm.com.Customer.name#phrase.action = set the name of {this} to {name}
+ibm.com.Customer.name#phrase.navigation = {name} of {this}
+ibm.com.Customer.oilStockPosition#phrase.action = set the oil stock position of {this} to {oil stock position}
+ibm.com.Customer.oilStockPosition#phrase.navigation = {oil stock position} of {this}
+ibm.com.Customer.owner#phrase.action = set the owner of {this} to {owner}
+ibm.com.Customer.owner#phrase.navigation = {owner} of {this}
+ibm.com.Customer.railStockPosition#phrase.action = set the rail stock position of {this} to {rail stock position}
+ibm.com.Customer.railStockPosition#phrase.navigation = {rail stock position} of {this}
+ibm.com.Customer.sectorPosition#phrase.action = set the sector position of {this} to {sector position}
+ibm.com.Customer.sectorPosition#phrase.navigation = {sector position} of {this}
+ibm.com.Customer.stockPosition#phrase.action = set the stock position of {this} to {stock position}
+ibm.com.Customer.stockPosition#phrase.navigation = {stock position} of {this}
+
+# ibm.com.Order
+ibm.com.Order#concept.label = order
+ibm.com.Order.action#phrase.action = set the action of {this} to {action}
+ibm.com.Order.action#phrase.navigation = {action} of {this}
+ibm.com.Order.amount#phrase.action = set the amount of {this} to {amount}
+ibm.com.Order.amount#phrase.navigation = {amount} of {this}
+ibm.com.Order.currency#phrase.action = set the currency of {this} to {currency}
+ibm.com.Order.currency#phrase.navigation = {currency} of {this}
+ibm.com.Order.dateTime#phrase.action = set the date time of {this} to {date time}
+ibm.com.Order.dateTime#phrase.navigation = {date time} of {this}
+ibm.com.Order.destination#phrase.action = set the destination of {this} to {destination}
+ibm.com.Order.destination#phrase.navigation = {destination} of {this}
+ibm.com.Order.exchange#phrase.action = set the exchange of {this} to {exchange}
+ibm.com.Order.exchange#phrase.navigation = {exchange} of {this}
+ibm.com.Order.id#phrase.action = set the id of {this} to {id}
+ibm.com.Order.id#phrase.navigation = {id} of {this}
+ibm.com.Order.reasons#phrase.action = set the reasons of {this} to {reasons}
+ibm.com.Order.reasons#phrase.navigation = {reasons} of {this}
+ibm.com.Order.sector#phrase.action = set the sector of {this} to {sector}
+ibm.com.Order.sector#phrase.navigation = {sector} of {this}
+ibm.com.Order.securityType#phrase.action = set the security type of {this} to {security type}
+ibm.com.Order.securityType#phrase.navigation = {security type} of {this}
+ibm.com.Order.setAction(ibm.com.ActionType)#phrase.action = set the action of {this} to {0}
+ibm.com.Order.setSecurityType(ibm.com.SecurityType)#phrase.action = set the security type of {this} to {0}
+ibm.com.Order.status#phrase.action = set the status of {this} to {status}
+ibm.com.Order.status#phrase.navigation = {status} of {this}
+ibm.com.Order.stock#phrase.action = set the stock of {this} to {stock}
+ibm.com.Order.stock#phrase.navigation = {stock} of {this}
+
+# ibm.com.ReasonsType
+ibm.com.ReasonsType#concept.label = reasons type
+ibm.com.ReasonsType.BAD_CLIENT#instance.label = BAD_CLIENT
+ibm.com.ReasonsType.BLACK_LIST_STOCKS#instance.label = BLACK_LIST_STOCKS
+ibm.com.ReasonsType.CUSTOMER_PREFERENCES#instance.label = CUSTOMER_PREFERENCES
+ibm.com.ReasonsType.fromValue(java.lang.String)#phrase.navigation = reasons type.fromValue({0})
+ibm.com.ReasonsType.value()#phrase.navigation = {this}.value()
+ibm.com.ReasonsType.valueOf(java.lang.String)#phrase.navigation = reasons type.valueOf({0})
+ibm.com.ReasonsType.values()#phrase.navigation = reasons type.values()
+
+# ibm.com.SectorType
+ibm.com.SectorType#concept.label = sector type
+ibm.com.SectorType.BANK#instance.label = BANK
+ibm.com.SectorType.OIL#instance.label = OIL
+ibm.com.SectorType.RAIL#instance.label = RAIL
+ibm.com.SectorType.TECH#instance.label = TECH
+ibm.com.SectorType.fromValue(java.lang.String)#phrase.navigation = sector type.fromValue({0})
+ibm.com.SectorType.value()#phrase.navigation = {this}.value()
+ibm.com.SectorType.valueOf(java.lang.String)#phrase.navigation = sector type.valueOf({0})
+ibm.com.SectorType.values()#phrase.navigation = sector type.values()
+
+# ibm.com.SecurityType
+ibm.com.SecurityType#concept.label = security type
+ibm.com.SecurityType.BONDS#instance.label = BONDS
+ibm.com.SecurityType.FUTURES#instance.label = FUTURES
+ibm.com.SecurityType.STOCK#instance.label = STOCK
+ibm.com.SecurityType.fromValue(java.lang.String)#phrase.navigation = security type.fromValue({0})
+ibm.com.SecurityType.value()#phrase.navigation = {this}.value()
+ibm.com.SecurityType.valueOf(java.lang.String)#phrase.navigation = security type.valueOf({0})
+ibm.com.SecurityType.values()#phrase.navigation = security type.values()
+
+# ibm.com.StatusType
+ibm.com.StatusType#concept.label = status type
+ibm.com.StatusType.ACCEPTED#instance.label = ACCEPTED
+ibm.com.StatusType.BLOCKED#instance.label = BLOCKED
+ibm.com.StatusType.PENDING#instance.label = PENDING
+ibm.com.StatusType.REJECTED#instance.label = REJECTED
+ibm.com.StatusType.fromValue(java.lang.String)#phrase.navigation = status type.fromValue({0})
+ibm.com.StatusType.value()#phrase.navigation = {this}.value()
+ibm.com.StatusType.valueOf(java.lang.String)#phrase.navigation = status type.valueOf({0})
+ibm.com.StatusType.values()#phrase.navigation = status type.values()

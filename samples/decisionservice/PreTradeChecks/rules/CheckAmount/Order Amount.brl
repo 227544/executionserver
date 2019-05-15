@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ilog.rules.studio.model.brl:ActionRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ilog.rules.studio.model.brl="http://ilog.rules.studio/model/brl.ecore">
+  <eAnnotations source="ilog.rules.custom_properties">
+    <details key="historyVersion" value="false"/>
+    <details key="editable" value="true"/>
+    <details key="modified" value="false"/>
+    <details key="creationDate" value="20 Jul 2004 06:04:25 GMT"/>
+    <details key="lastModificationDate" value="26 Jul 2004 08:45:13 GMT"/>
+  </eAnnotations>
+  <name>Order Amount</name>
+  <uuid>fcf10c42-46c6-44ee-ad18-6a89026b9702</uuid>
+  <priority>minimum</priority>
+  <locale>en_US</locale>
+  <definition><![CDATA[if
+	the amount of order is less than 100,000 
+then
+	set the status of report to "Pending" ;
+	set the reasons of report to "CustomerPreferences" ;]]></definition>
+</ilog.rules.studio.model.brl:ActionRule>

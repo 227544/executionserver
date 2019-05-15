@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ilog.rules.studio.model.base:RulePackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ilog.rules.studio.model.base="http://ilog.rules.studio/model/base.ecore">
+  <eAnnotations source="ilog.rules.custom_properties">
+    <details key="isRoot" value="false"/>
+    <details key="isLeaf" value="false"/>
+    <details key="isAbstract" value="false"/>
+    <details key="editable" value="true"/>
+    <details key="modified" value="false"/>
+    <details key="creationDate" value="16 Jul 2004 10:08:28 GMT"/>
+    <details key="lastModificationDate" value="12 Aug 2004 08:50:32 GMT"/>
+  </eAnnotations>
+  <name>CheckCurrency</name>
+  <uuid>770f0f72-324d-4d54-a9ff-70ee10e85d3a</uuid>
+  <orderedMembers>Currency Restriction</orderedMembers>
+</ilog.rules.studio.model.base:RulePackage>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17 5655-Y31 5724-X98 5724-Y15 5655-V82                                     -->
+<!-- Copyright IBM Corp. 1987, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+
+
+<project default="usage" basedir=".">
+	<property name="ds.home" location="${basedir}/../../../.." />
+	<property name="odm.wlp.scripts.dir" value="${ds.home}/shared/samplesServer/wlp" />
+	<import file="${odm.wlp.scripts.dir}/build.xml"/>
+	<property name="executionserver.home" value="${ds.home}/executionserver"/>
+	<import file="${executionserver.home}/lib/classpath-executionserver.xml"/>
+
+	<property name="classes.dir" location="../classes" />
+	<property name="src.dir" location="../src" />
+
+	<target name="usage">
+		<!-- *********************************************************-->
+		<echo message="Targets:" />
+		<echo message="* build          : compile the java classes" />
+		<echo message="* run            : check ruleset validity" />
+		<echo message="* displayruleapp : display RuleApp list" />
+		<echo message="* clean          : delete the compiled classes" />
+		<!-- ******************************************************** -->
+	</target>
+
+	<!-- Utilities target to build the classes -->
+	<target name="build"  depends="init">
+		<mkdir dir="${classes.dir}" />
+		<javac includeantruntime="false" fork="true" 
+    		srcdir="${src.dir}" 
+    		destdir="${classes.dir}" 
+    		verbose="off" 
+    		debug="on" 
+    		includes="**/JmxRemoteImpl.java,**/CommonHandler.java,**/WlpClient.java">
+			<classpath refid="wlp.classpath" />
+		</javac>
+	</target>
+
+	<target name="run" depends="build" description="check ruleset validity">
+		<echo message="Running with Websphere Liberty Profile" />
+		<java   fork="yes" classname="jmxremote.WlpClient" failonerror="yes">
+			<sysproperty key="wlp.server.config.dir" value="${wlp.server.config.dir}"/>
+			<classpath refid="wlp.classpath" />
+		</java>
+	</target>
+
+	<target name="displayruleapp" depends="build" description="display RuleApp list">
+		<echo message="Running with Websphere Liberty Profile" />
+		<java   fork="yes" classname="jmxremote.WlpClient" failonerror="yes">
+			<arg value="-displayall" />
+			<sysproperty key="wlp.server.config.dir" value="${wlp.server.config.dir}"/>
+			<classpath refid="wlp.classpath" />
+		</java>
+	</target>
+
+	<target name="clean" description="delete the compiled classes">
+		<echo message="Cleaning ${classes.dir} directory" />
+		<delete dir="${classes.dir}" quiet="true" />
+	</target>
+
+	<target name="init">
+		<path id="wlp.classpath">
+			<pathelement path=".." />
+			<pathelement path="." />
+			<path refid="executionserver.j2se.classpath" />
+			<path refid="executionserver.tools.classpath" />
+			<fileset refid="executionserver.management.classpath" />
+			<pathelement path="${classes.dir}" />
+			<fileset dir="${wlp.home}/clients">
+				<include name="restConnector.jar"/>
+			</fileset>
+			
+		</path>
+	</target>
+
+
+</project>

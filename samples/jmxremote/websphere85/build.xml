@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17 5655-Y31 5724-X98 5724-Y15 5655-V82                                     -->
+<!-- Copyright IBM Corp. 1987, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+
+
+<project default="usage" basedir=".">
+  <property name="executionserver.home" value="${basedir}/../../.." />
+  <import file="${executionserver.home}/lib/classpath-executionserver.xml" />
+
+  <property name="classes.dir" location="../classes" />
+  <property name="src.dir" location="../src" />
+  <property name="was.dir" location="../websphere85" />
+
+  <target name="usage">
+    <!-- *********************************************************-->
+    <echo message="Targets:" />
+    <echo message="* build          : compile the java classes" />
+    <echo message="* run            : check ruleset validity" />
+    <echo message="* displayruleapp : display RuleApp list" />
+    <echo message="* clean          : delete the compiled classes" />
+    <!-- ******************************************************** -->
+  </target>
+
+  <!-- Utilities target to build the classes -->
+  <target name="build" depends="check.websphere.env">
+    <mkdir dir="${classes.dir}" />
+    <echo message="Compiling the Websphere jmx classes" />
+    <echo message="using websphere at ${was.home}" />
+    <javac includeantruntime="false" executable="${was.jdk.home}/bin/javac"  fork="yes" nowarn="true" srcdir="${src.dir}" destdir="${classes.dir}" verbose="off" debug="on" optimize="on" includes="**/JmxRemoteImpl.java,**/CommonHandler.java,**/WebsphereClient.java">
+      <classpath refid="websphere.classpath" />
+    </javac>
+  </target>
+
+  <target name="run" depends="build" description="check ruleset validity">
+    <echo message="Running with WebSphere 8.5" />
+    <java classname="jmxremote.WebsphereClient" jvm="${was.jdk.home}/bin/java"  fork="yes" failonerror="yes">
+      <sysproperty key="was.home" value="${was.home}/profiles/${profile.name}" />
+      <sysproperty key="java.ext.dirs" path="${was.home}/lib;${was.jdk.home}/jre/lib/ext;${was.jdk.home}/lib;${was.home}/lib/ext;${was.home}/deploytool/itp/plugins/com.ibm.etools.ejbdeploy/runtime;${was.home}/plugins" />
+      <sysproperty key="java.security.auth.login.config" value="${was.home}/properties/wsjaas_client.conf" />
+      <sysproperty key="com.ibm.CORBA.ConfigURL" value="file:${was.home}/profiles/${profile.name}/properties/sas.client.props" />
+      <sysproperty key="com.ibm.SSL.ConfigURL" value="file:${was.home}/profiles/${profile.name}/properties/ssl.client.props" />
+      <sysproperty key="java.util.logging.manager" value="com.ibm.ws.bootstrap.WsLogManager" />
+      <sysproperty key="java.util.logging.configureByServer" value="true" />
+      <sysproperty key="server.root" value="${was.home}" />
+      <sysproperty key="user.install.root" value="${was.home}/profiles/${profile.name}" />
+
+      <classpath refid="websphere.classpath" />
+    </java>
+  </target>
+
+  <target name="displayruleapp" depends="build" description="display RuleApp list">
+    <echo message="Running with websphere" />
+    <java classname="jmxremote.WebsphereClient" jvm="${was.jdk.home}/bin/java" fork="yes" failonerror="yes">
+      <sysproperty key="was.home" value="${was.home}/profiles/${profile.name}" />
+      <sysproperty key="java.ext.dirs" path="${was.home}/lib;${was.jdk.home}/jre/lib/ext;${was.jdk.home}/lib;${was.home}/lib/ext;${was.home}/deploytool/itp/plugins/com.ibm.etools.ejbdeploy/runtime;${was.home}/plugins" />
+      <sysproperty key="java.security.auth.login.config" value="${was.home}/properties/wsjaas_client.conf" />
+      <sysproperty key="com.ibm.CORBA.ConfigURL" value="file:${was.home}/profiles/${profile.name}/properties/sas.client.props" />
+      <sysproperty key="com.ibm.SSL.ConfigURL" value="file:${was.home}/profiles/${profile.name}/properties/ssl.client.props" />
+      <sysproperty key="com.ibm.SOAP.ConfigURL" value="file:${was.home}/profiles/${profile.name}/properties/soap.client.props" />
+      <sysproperty key="java.util.logging.manager" value="com.ibm.ws.bootstrap.WsLogManager" />
+      <sysproperty key="java.util.logging.configureByServer" value="true" />
+      <sysproperty key="server.root" value="${was.home}" />
+      <sysproperty key="user.install.root" value="${was.home}/profiles/${profile.name}" />
+
+      <arg value="-displayall" />
+
+      <classpath refid="websphere.classpath" />
+    </java>
+  </target>
+
+  <target name="clean" description="delete the compiled classes">
+    <echo message="Cleaning ${classes.dir} directory" />
+    <delete dir="${classes.dir}" quiet="true" />
+  </target>
+
+  <target name="check.websphere.env">
+    <property environment="env" />
+    <property file="build.properties" />
+    <echo message="checking websphere is installed properly was.home : ${was.home}" />
+    <available property="websphere.env" file="${was.home}" type="dir" />
+    <antcall target="test.websphere.env" />
+    <available property="websphere.jdk" file="${was.jdk.home}" type="dir" />
+    <antcall target="test.websphere.jdk" />
+    <!--classpath for websphere-->
+    <path id="websphere.classpath">
+      <pathelement path="${classes.dir}" />
+      <pathelement path=".." />
+      <pathelement path="." />
+      <pathelement path="${executionserver.home}/lib/jrules-res-manage-tools.jar" />
+      <pathelement path="${executionserver.home}/lib/log4j-1.2.8.jar" />
+
+      <pathelement location="${was.home}/lib/startup.jar" />
+      <pathelement location="${was.home}/lib/bootstrap.jar" />
+      <pathelement location="${was.home}/lib/j2ee.jar" />
+      <pathelement location="${was.home}/lib/lmproxy.jar" />
+      <pathelement location="${was.home}/lib/urlprotocols.jar" />
+      <pathelement location="${was.jdk.home}/lib/tools.jar" />
+      <pathelement location="${was.home}/properties" />
+      <pathelement location="${was.home}/profiles/${profile.name}/properties" />
+      <pathelement location="${was.home}/runtimes/com.ibm.ws.admin.client_8.5.0.jar" />
+    </path>
+    <copy file="${was.dir}/build.properties"
+          todir="${classes.dir}" />
+  </target>
+
+  <target name="test.websphere.env" unless="websphere.env">
+    <fail message="Please set properly was.home property." />
+  </target>
+ <target name="test.websphere.jdk" unless="websphere.jdk">
+    <fail message="Please set properly was.jdk.home property." />
+  </target>
+</project>

@@ -1,0 +1,1 @@
+Make sure the file jrules-mbean-descriptors.jar is in your WAS_HOME/lib directory

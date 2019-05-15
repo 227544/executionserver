@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry including="jmxremote/CommonHandler.java|jmxremote/JmxRemoteImpl.java|jmxremote/WlpClient.java" kind="src" path="src"/>
+	<classpathentry kind="src" path="src/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/jrules-res-manage-tools.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="var" path="IBM_DM_SAMPLES_SERVER_HOME/clients/restConnector.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

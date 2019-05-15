@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions name="PreTradeChecksDecisionService" targetNamespace="http://www.ibm.com/rules/decisionservice/PreTradeChecksRuleApp/PreTradeChecks" xmlns:dstns="http://www.ibm.com/rules/decisionservice/PreTradeChecksRuleApp/PreTradeChecks" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.ibm.com/rules/decisionservice/PreTradeChecksRuleApp/PreTradeChecks/param" xmlns:xom1="http://www.ibm.com/rules/decisionservice/PreTradeChecksRuleApp/PreTradeChecks">
+      <xsd:import namespace="http://www.ibm.com/rules/decisionservice/PreTradeChecksRuleApp/PreTradeChecks"/>
+      <xsd:element name="customerParameter">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="customerParameter" type="xom1:Customer"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="orderParameter">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="orderParameter" type="xom1:Order"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="reportParameter">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="reportParameter" type="xom1:Order"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+    <xs:schema targetNamespace="http://www.ibm.com/rules/decisionservice/PreTradeChecksRuleApp/PreTradeChecks" version="1.0" xmlns:filter="http://www.ibm.com/rules/decisionservice/tracefilter" xmlns:param="http://www.ibm.com/rules/decisionservice/PreTradeChecksRuleApp/PreTradeChecks/param" xmlns:tns="http://www.ibm.com/rules/decisionservice/PreTradeChecksRuleApp/PreTradeChecks" xmlns:trace="http://www.ibm.com/rules/decisionservice/trace" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <xsd:import namespace="http://www.ibm.com/rules/decisionservice/PreTradeChecksRuleApp/PreTradeChecks/param"/>
+      <xsd:import namespace="http://www.ibm.com/rules/decisionservice/tracefilter"/>
+      <xsd:import namespace="http://www.ibm.com/rules/decisionservice/trace"/>
+
+  <xs:complexType name="Customer">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="owner" type="xs:string"/>
+      <xs:element name="initialValue" type="xs:float"/>
+      <xs:element name="currentValue" type="xs:float"/>
+      <xs:element name="sectorPosition" type="xs:float"/>
+      <xs:element name="bankStockPosition" type="xs:float"/>
+      <xs:element name="oilStockPosition" type="xs:float"/>
+      <xs:element name="railStockPosition" type="xs:float"/>
+      <xs:element name="bondPosition" type="xs:float"/>
+      <xs:element name="futurPosition" type="xs:float"/>
+      <xs:element name="stockPosition" type="xs:float"/>
+      <xs:element name="currency" type="tns:Currency"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Order">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+      <xs:element minOccurs="0" name="stock" type="xs:string"/>
+      <xs:element name="amount" type="xs:int"/>
+      <xs:element minOccurs="0" name="exchange" type="xs:string"/>
+      <xs:element name="currency" type="tns:Currency"/>
+      <xs:element minOccurs="0" name="destination" type="xs:string"/>
+      <xs:element name="action" type="tns:ActionType"/>
+      <xs:element name="securityType" type="tns:SecurityType"/>
+      <xs:element name="dateTime" type="xs:dateTime"/>
+      <xs:element name="sector" type="tns:SectorType"/>
+      <xs:element name="status" type="tns:StatusType"/>
+      <xs:element name="reasons" type="tns:ReasonsType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="Currency">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="USDollar"/>
+      <xs:enumeration value="Euro"/>
+      <xs:enumeration value="Pound"/>
+      <xs:enumeration value="JPRen"/>
+      <xs:enumeration value="PRCRMB"/>
+      <xs:enumeration value="SGDollar"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ActionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Buy"/>
+      <xs:enumeration value="Sell"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SecurityType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Bonds"/>
+      <xs:enumeration value="Futures"/>
+      <xs:enumeration value="Stock"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SectorType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Tech"/>
+      <xs:enumeration value="Oil"/>
+      <xs:enumeration value="Rail"/>
+      <xs:enumeration value="Bank"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="StatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Accepted"/>
+      <xs:enumeration value="Rejected"/>
+      <xs:enumeration value="Pending"/>
+      <xs:enumeration value="Blocked"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ReasonsType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CustomerPreferences"/>
+      <xs:enumeration value="BlackListStocks"/>
+      <xs:enumeration value="BadClient"/>
+    </xs:restriction>
+  </xs:simpleType>
+<xsd:element name="PreTradeChecksRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element form="qualified" maxOccurs="1" minOccurs="0" name="DecisionID" type="xsd:string"/>
+            <xsd:element ref="filter:decisionTraceFilter"/>
+            <xsd:element ref="param:customerParameter"/>
+            <xsd:element ref="param:orderParameter"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="PreTradeChecksResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element form="qualified" name="DecisionID" type="xsd:string"/>
+            <xsd:element ref="trace:decisionTrace"/>
+            <xsd:element ref="param:reportParameter"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="PreTradeChecksException">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="exception" nillable="false" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xs:schema>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ibm.com/rules/decisionservice/trace" xmlns="http://www.ibm.com/rules/decisionservice/trace">
+
+	<xsd:element name="decisionTrace">
+		<xsd:complexType>
+			<xsd:sequence>
+
+				<!-- Runtime information: Execution Id, unique identifier -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="decisionId" type="xsd:string"/>
+
+				<!-- Runtime information: the requested ruleset path, that is, the one supplied to the rule session request -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="requestedRulesetPath" type="xsd:string"/>
+
+				<!-- Runtime information: after execution -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="executedRulesetPath" type="xsd:string"/>
+
+				<!-- Runtime information: date when the ruleset execution started -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="executionDate" type="xsd:dateTime"/>
+
+				<!-- Runtime information: Time taken to execute the ruleset -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="executionDuration" type="xsd:integer"/>
+
+				<!-- Static information: ruleset properties -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="rulesetProperties" type="Properties"/>
+
+				<!-- Static information: system properties -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="systemProperties" type="Properties"/>
+
+				<!-- Static information: internet address -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="inetAddress" type="xsd:string"/>
+
+				<!-- Rules -->
+
+				<!-- Static information: Number of rules contained in the ruleset -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="totalRules" type="xsd:integer"/>
+
+				<!-- Runtime information: Number of rules executed -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="totalRulesFired" type="xsd:integer"/>
+
+				<!-- Runtime information : Number of rules that were not executed -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="totalRulesNotFired" type="xsd:integer"/>
+
+				<!-- Static information : Information about all rules contained in the ruleset -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="rules" type="RulesFired"/>
+
+				<!-- Runtime information : Information about rules executed during the execution -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="rulesFired" type="RulesFired"/>
+
+				<!-- Runtime information : Rules that were not executed -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="rulesNotFired" type="Rules"/>
+
+				<!-- Tasks -->
+
+				<!-- Static information: Number of tasks contained in the ruleset -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="totalTasks" type="xsd:integer"/>
+
+				<!-- Runtime information: Number of tasks executed -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="totalTasksExecuted" type="xsd:integer"/>
+
+				<!-- Runtime information: Number of tasks that were not executed -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="totalTasksNotExecuted" type="xsd:integer"/>
+
+				<!-- Static information: Information about all tasks contained in the ruleset -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="tasks" type="Tasks"/>
+
+				<!-- Runtime information : Information about tasks executed during the execution -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="tasksExecuted" type="TasksExecuted"/>
+
+				<!-- Runtime information : Tasks that were not executed -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="tasksNotExecuted" type="Tasks"/>
+
+				<!-- Others -->
+
+				<!-- Runtime information: output string -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="outputString" type="xsd:string"/>
+
+				<!-- Runtime information: Parameters before the execution -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="inputParameters" type="Parameters"/>
+
+				<!-- Runtime information: Parameters after the execution -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="outputParameters" type="Parameters"/>
+
+				<!-- Runtime information: Working memory after the execution -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="workingMemory" type="DataObjects"/>
+
+				<!-- Runtime information: Events recorded during the execution -->
+				<xsd:element maxOccurs="1" minOccurs="0" name="executionEvents" type="ExecutionEvents"/>
+
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="RulesFired">
+		<xsd:annotation>
+			<xsd:documentation>The list of rules that have been executed.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="ruleInformation" type="ArtifactInformation"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Rules">
+		<xsd:annotation>
+			<xsd:documentation>The list of rules that have not been executed.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="ruleInformation" type="ArtifactInformation"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="TasksExecuted">
+		<xsd:annotation>
+			<xsd:documentation>The list of rules that have been executed.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="taskInformation" type="ArtifactInformation"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Tasks">
+		<xsd:annotation>
+			<xsd:documentation>The list of rules that have not been executed.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="taskInformation" type="ArtifactInformation"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ArtifactInformation">
+		<xsd:annotation>
+			<xsd:documentation>Information describing to a single element.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="businessName" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="properties" type="Properties"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Properties">
+		<xsd:annotation>
+			<xsd:documentation>Represents a list of properties.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="property" type="Property"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Property">
+		<xsd:annotation>
+			<xsd:documentation>Represents a named property.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="name" type="xsd:string" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="Parameters">
+		<xsd:annotation>
+			<xsd:documentation>Represents a list of parameters.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="Parameter"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType mixed="true" name="Parameter">
+		<xsd:annotation>
+			<xsd:documentation>Represents a named parameter.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:any maxOccurs="unbounded" minOccurs="0" namespace="##any" processContents="skip"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="serializer" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+
+	<!--  Execution Events -->
+	<xsd:complexType name="ExecutionEvents">
+		<xsd:annotation>
+			<xsd:documentation>The list of execution events.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice maxOccurs="1" minOccurs="0">
+			<xsd:element maxOccurs="unbounded" minOccurs="1" name="taskEvent" type="TaskEvent"/>
+			<xsd:element maxOccurs="unbounded" minOccurs="1" name="ruleEvent" type="RuleEvent"/>
+		</xsd:choice>
+	</xsd:complexType>
+
+	<xsd:complexType name="TaskEvent">
+		<xsd:annotation>
+			<xsd:documentation>Represents a task that has been executed.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="startDate" type="xsd:dateTime"/>
+			<xsd:element name="taskInformation" type="ArtifactInformation"/>
+			<xsd:element name="executionEvents" type="ExecutionEvents"/>
+			<xsd:element name="endDate" type="xsd:dateTime"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="RuleEvent">
+		<xsd:annotation>
+			<xsd:documentation>Represents a rule that has been executed.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="startDate" type="xsd:dateTime"/>
+			<xsd:element name="priority" type="xsd:integer"/>
+			<xsd:element name="ruleInformation" type="ArtifactInformation"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="boundObjects" type="DataObjects"/>
+			<xsd:element name="endDate" type="xsd:dateTime"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="DataObjects">
+		<xsd:annotation>
+			<xsd:documentation>Represents a list of elements of bound objects.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="object" type="DataObject"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType mixed="true" name="DataObject">
+		<xsd:annotation>
+			<xsd:documentation>The serialized representation of a Java object instance.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:any maxOccurs="1" minOccurs="0" namespace="##any" processContents="skip"/>
+		</xsd:sequence>
+		<xsd:attribute name="serializer" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+
+</xsd:schema>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ibm.com/rules/decisionservice/tracefilter" xmlns="http://www.ibm.com/rules/decisionservice/tracefilter">
+
+	<xsd:element name="decisionTraceFilter" nillable="true" type="TraceFilter"/>
+
+	<xsd:complexType name="TraceFilter">
+
+		<xsd:sequence>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="all" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records everything if set to true.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="none" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records nothing but the other following filters.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="executionDuration" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the duration of the execution.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="executionDate" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the date of the execution.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="rulesetProperties" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records static data about the ruleset.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="systemProperties" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records static data about the execution server.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="inetAddress" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records static data about the internet address of the server.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="totalRulesFired" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the number of rules executed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="totalRulesNotFired" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the number of rules that have not been executed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="rules" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the complete list of rules in the executed ruleset.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="rulesFired" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records any rule that has been executed at least once.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="rulesNotFired" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the rules that have not been executed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="totalTasksExecuted" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the number of tasks executed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="totalTasksNotExecuted" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the number of tasks that have not been executed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="tasks" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the complete list of tasks in the executed ruleset.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="tasksExecuted" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records any task that has been executed at least once.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="tasksNotExecuted" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the tasks that have not been executed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="outputString" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the stream output of the engine execution.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="inputParameters" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records ruleset input parameters.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="outputParameters" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records ruleset output parameters.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="workingMemory" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the state of the working memory.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element maxOccurs="1" minOccurs="0" name="workingMemoryFilter" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Holds the working memory filter.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="executionEvents" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the events that have been executed. This filter is a shortcut to select tasksExecuted and rulesFired filters.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			
+			<xsd:element maxOccurs="1" minOccurs="0" name="boundObjects" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>Records the list of matched objects.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+						
+			<xsd:element default="ClassName" maxOccurs="1" minOccurs="0" name="boundObjectsSerializationType">
+				<xsd:annotation>
+					<xsd:documentation>Choose the type of serialization for bound objects.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+				  <xsd:restriction base="xsd:string">
+				    <xsd:enumeration value="JAXB"/>
+				    <xsd:enumeration value="ToString"/>
+				    <xsd:enumeration value="ClassName"/>
+				  </xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>			
+						
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="PreTradeChecksSoapFault">
+    <wsdl:part element="dstns:PreTradeChecksException" name="fault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PreTradeChecksRequest">
+    <wsdl:part element="dstns:PreTradeChecksRequest" name="PreTradeChecksRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PreTradeChecksResponse">
+    <wsdl:part element="dstns:PreTradeChecksResponse" name="PreTradeChecksResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="PreTradeChecksDecisionService">
+    <wsdl:operation name="PreTradeChecks">
+      <wsdl:input message="dstns:PreTradeChecksRequest" name="PreTradeChecksRequest">
+    </wsdl:input>
+      <wsdl:output message="dstns:PreTradeChecksResponse" name="PreTradeChecksResponse">
+    </wsdl:output>
+      <wsdl:fault message="dstns:PreTradeChecksSoapFault" name="PreTradeChecksSoapFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PreTradeChecksRuleAppPreTradeChecksBinding" type="dstns:PreTradeChecksDecisionService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="PreTradeChecks">
+      <soap:operation soapAction="PreTradeChecks" style="document"/>
+      <wsdl:input name="PreTradeChecksRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="PreTradeChecksResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="PreTradeChecksSoapFault">
+        <soap:fault name="PreTradeChecksSoapFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PreTradeChecksDecisionService">
+    <wsdl:port binding="dstns:PreTradeChecksRuleAppPreTradeChecksBinding" name="PreTradeChecksRuleAppPreTradeChecksPort">
+      <soap:address location="http://localhost:9090/DecisionService/ws/PreTradeChecksRuleApp/1.0/PreTradeChecks/1.0/v75"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

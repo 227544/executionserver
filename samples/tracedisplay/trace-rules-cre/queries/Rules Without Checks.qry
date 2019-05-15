@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model.query:Query xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:model.query="http://ilog.rules.studio/model/query.ecore">
+  <name>Rules Without Checks</name>
+  <uuid>7195242e-223a-4de5-bef5-f8e0543bf5b3</uuid>
+  <definition><![CDATA[Find all business rules
+	such that the name of each business rule does not start with "check"]]></definition>
+  <locale>en_US</locale>
+</model.query:Query>

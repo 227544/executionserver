@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model.brl:ActionRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:model.brl="http://ilog.rules.studio/model/brl.ecore">
+  <name>initialCorporateScore</name>
+  <uuid>0cc53e68-d60a-4943-b81a-452e24f80850</uuid>
+  <priority>1000000</priority>
+  <locale>en_US</locale>
+  <definition><![CDATA[then 
+    set the corporate score in 'the loan report' to the credit score of 'the borrower'; 
+
+]]></definition>
+</model.brl:ActionRule>

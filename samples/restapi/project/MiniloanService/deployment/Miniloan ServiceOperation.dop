@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.ibm.rules.studio.model.decisionservice:Operation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.ibm.rules.studio.model.decisionservice="http://com.ibm.rules.studio/model/decisionservice.ecore" xmlns:ilog.rules.studio.model.query.extractor="http://ilog.rules.studio/model/query/extractor.ecore" rulesetName="Miniloan_ServiceRuleset" usingRuleflow="true" ruleflowName="miniloan" targetRuleProjectName="MiniloanService">
+  <name>Miniloan ServiceOperation</name>
+  <uuid>be3e8080-53bc-4034-b318-e9c1ce9c613a</uuid>
+  <referencedVariables variableName="borrower" variableSetName="Miniloan ServiceParameters">
+    <variableSet href="../rules/Miniloan%20ServiceParameters.var#c0973a03-26d8-4c54-b97d-f49c99ff825d"/>
+  </referencedVariables>
+  <referencedVariables variableName="loan" variableSetName="Miniloan ServiceParameters" direction="IN_OUT">
+    <variableSet href="../rules/Miniloan%20ServiceParameters.var#c0973a03-26d8-4c54-b97d-f49c99ff825d"/>
+  </referencedVariables>
+  <ruleflow href="../rules/miniloan.rfl#3099f5b6-27b1-4b66-aa8e-9eed143de245"/>
+  <extractor xsi:type="ilog.rules.studio.model.query.extractor:QueryExtractor" name="Miniloan ServiceOperation_extractor" validator="Default Validator"/>
+  <targetRuleProject href="../../MiniloanService#87e99f39-fbc7-4789-ae4d-7bc490adda88"/>
+</com.ibm.rules.studio.model.decisionservice:Operation>

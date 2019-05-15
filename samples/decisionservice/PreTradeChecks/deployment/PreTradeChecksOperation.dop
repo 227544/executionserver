@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.ibm.rules.studio.model.decisionservice:Operation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:com.ibm.rules.studio.model.decisionservice="http://com.ibm.rules.studio/model/decisionservice.ecore" rulesetName="PreTradeChecks" usingRuleflow="true" ruleflowName="Ruleflow" targetRuleProjectName="PreTradeChecks">
+  <name>PreTradeChecksOperation</name>
+  <uuid>bc90b85c-2be5-4b67-92bc-966e4baf89db</uuid>
+  <referencedVariables variableName="orderParameter" variableSetName="PreTradeChecksParameters">
+    <variableSet href="../rules/PreTradeChecksParameters.var#3175196f-2028-4119-a59b-bea50bd884f2"/>
+  </referencedVariables>
+  <referencedVariables variableName="reportParameter" variableSetName="PreTradeChecksParameters" direction="OUT">
+    <variableSet href="../rules/PreTradeChecksParameters.var#3175196f-2028-4119-a59b-bea50bd884f2"/>
+  </referencedVariables>
+  <referencedVariables variableName="customerParameter" variableSetName="PreTradeChecksParameters">
+    <variableSet href="../rules/PreTradeChecksParameters.var#3175196f-2028-4119-a59b-bea50bd884f2"/>
+  </referencedVariables>
+  <ruleflow href="../rules/Ruleflow.rfl#a5867dca-7ad6-421b-bbff-58cb4928a709"/>
+  <targetRuleProject href="../../PreTradeChecks#fc9cbed0-52ea-4f63-a460-5a95a845a849"/>
+</com.ibm.rules.studio.model.decisionservice:Operation>

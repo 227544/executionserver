@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17 5655-Y31 5724-X98 5724-Y15 5655-V82                                     -->
+<!-- Copyright IBM Corp. 1987, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+
+
+<project name="Monitoring events" default="usage" basedir=".">
+
+	<description>How to Monitor events in RES</description>
+	<property name="ds.home" location="${basedir}/../../.." />
+	<property name="odm.wlp.scripts.dir" value="${ds.home}/shared/samplesServer/wlp" />
+	<import file="${odm.wlp.scripts.dir}/build.xml"/>
+	
+	<property name="executionserver.home" value="${ds.home}/executionserver"/>
+	<import file="${executionserver.home}/lib/classpath-executionserver.xml"/>
+
+	<property name="src.dir" location="${basedir}/src"/>
+	<property name="classes.dir" location="${basedir}/classes"/>
+	<property name="build.dir" value="${basedir}/build"/>
+	<property name="lib.dir" location="${basedir}/lib"/>
+	<property name="data.dir" value="${basedir}/data"/>
+	<property name="res.management.appli" value="res.war"/>
+	<property name="executionserver.sample.dir" location="${executionserver.home}/applicationservers/WLP855" />
+	
+	 
+	<!-- classpath -->
+	<path id="sample.classpath">
+		<pathelement location="${classes.dir}"/>
+		<pathelement location="${lib.dir}/rome-0.8.jar"/>
+		<pathelement location="${executionserver.home}/lib/jrules-res-manage-tools.jar"/> 
+
+		<fileset dir="${executionserver.home}/lib">
+			<include name="servlet-api*.jar"/>
+			<include name="jdom-*.jar"/>
+		</fileset>
+		
+		<path refid="engine.classpath"/>
+	</path>
+
+	<taskdef resource="res-tasks.properties">
+		<classpath refid="executionserver.tools.classpath"/>
+	</taskdef>
+
+	<!-- print help -->
+	<target name="usage">
+		<echo message="" />
+		<echo message="Usage:" />
+		<echo message="  ant clean           --> clean classes and repackage WAR"/>
+		<echo message="  ant build           --> compilation"/>
+		<echo message="  ant repack          --> repackage the management console to embbed the sample"/>
+		<echo message="  ant deploy          --> deploy the repackaged WAR"/>
+		<echo message="  ant deploy.ruleapp  --> deploy a RuleApp containing two Rulesets to generates events"/>
+		<echo message="  ant reset.rss       --> call the RSS Servlet with the reset parameter to remove all entries"/>
+		<echo message="  ant cleanup         --> remove the sample RuleApp and restore the original management console"/>
+	</target>
+
+	<!-- sample compilation -->
+	<target name="build">
+		<mkdir dir="${classes.dir}"/>
+		<!-- Copy the server properties file-->
+		<copy file="${odm.wlp.scripts.dir}/build.properties"
+		      todir="${classes.dir}" />
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}" nowarn="true" source="1.7" target="1.7" debug="on" fork="true">
+			<classpath refid="sample.classpath"/>
+		</javac>
+	</target>
+
+	<!-- jar -->
+	<target name="jar" depends="build">
+		<mkdir dir="${build.dir}"/>
+		<jar destfile="${build.dir}/monitoringevents.jar" basedir="${classes.dir}"/>
+	</target>
+
+	<!-- repackage management console WAR with the sample -->
+	<target name="repack" depends="clean, jar" description="repack the management console">
+		<!-- copy   -->
+		<mkdir dir="${build.dir}/war" />
+		<!-- extract the WAR content -->
+		<unzip src="${executionserver.sample.dir}/${res.management.appli}" dest="${build.dir}/war"/>
+		<delete file="${build.dir}/${res.management.appli}"/>
+		<!-- add sample jar file to the WAR lib directory -->
+		<copy file="${build.dir}/monitoringevents.jar" todir="${build.dir}/war/WEB-INF/lib"/>
+		<!-- add RSS libs to the WAR lib directory -->
+		<copy file="${lib.dir}/rome-0.8.jar" todir="${build.dir}/war/WEB-INF/lib"/>
+		<copy todir="${build.dir}/war/WEB-INF/lib">
+			<fileset dir="${executionserver.home}/lib">
+				<include name="jdom-*.jar"/>
+			</fileset>
+		</copy>
+		<!-- copy feed image -->
+		<copy file="${data.dir}/empty.gif" todir="${build.dir}/war/images"/>
+		<!-- patch the WAR web.xml file to add the context listener and the Servlet -->
+		<move file="${build.dir}/war/WEB-INF/web.xml" todir="${build.dir}"/>
+		<replace file="${build.dir}/web.xml">
+			<replacetoken><![CDATA[<listener-class>ilog.rules.jsf.listeners.IlrSessionManagerListener</listener-class>]]></replacetoken>
+			<replacevalue><![CDATA[<listener-class>ilog.rules.jsf.listeners.IlrSessionManagerListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>monitoringevents.EventsContextListener</listener-class>]]></replacevalue>
+		</replace>
+		<replace file="${build.dir}/web.xml">
+			<replacetoken><![CDATA[<servlet-class>ilog.rules.res.console.servlet.IlrRepositoryServiceServlet</servlet-class>]]></replacetoken>
+			<replacevalue><![CDATA[<servlet-class>ilog.rules.res.console.servlet.IlrRepositoryServiceServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>EventsFeedServlet</servlet-name>
+		<servlet-class>monitoringevents.EventsFeedServlet</servlet-class>]]></replacevalue>
+		</replace>
+		<replace file="${build.dir}/web.xml">
+			<replacetoken><![CDATA[<url-pattern>*.jsf</url-pattern>]]></replacetoken>
+			<replacevalue><![CDATA[<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EventsFeedServlet</servlet-name>
+		<url-pattern>/monitoringevents.rss</url-pattern>]]></replacevalue>
+		</replace>
+		<!-- patch the RES home page to add the RSS alternate -->
+		<move file="${build.dir}/war/includes/common_head.jspf" todir="${build.dir}"/>
+		<concat destfile="${build.dir}/war/includes/common_head.jspf">
+			<fileset file="${data.dir}/rss-link.txt"/>
+			<fileset file="${build.dir}/common_head.jspf"/>
+		</concat>
+		<delete file="${build.dir}/common_head.jspf"/>
+		<!-- repack the WAR file -->
+		<war destfile="${build.dir}/${res.management.appli}"
+			basedir="${build.dir}/war"
+			webxml="${build.dir}/web.xml"
+			manifest="${build.dir}/war/META-INF/MANIFEST.MF"/>
+		<delete file="${build.dir}/web.xml"/>
+		<delete dir="${build.dir}/war"/>
+	</target>
+	
+	<target name="deploy" description="deploys the repacked console">
+	  <module.deploy path="${build.dir}/${res.management.appli}" />
+	</target>	
+	
+
+	<!-- deploy a RuleApp containing two Rulesets to generates events -->
+	<target name="deploy.ruleapp" description="deploys a ruleapp">
+		<res-deploy hostname="localhost"
+			portnumber="${server.port}"
+			userid="resAdmin"
+			password="resAdmin"
+			file="${data.dir}/monitoringevents-ruleapp.jar"/>
+	</target>
+
+	<!-- call the RSS Servlet with the reset parameter to remove all entries -->
+	<target name="reset.rss" description="reset the RSS feed">
+		<get src="http://localhost:${server.port}/res/monitoringevents.rss?reset=t" dest="${build.dir}/tmp.xml" verbose="true"/>
+		<delete file="${build.dir}/tmp.xml"/>
+	</target>
+
+	<!-- remove the sample RuleApp and restore the original management console -->
+	<target name="cleanup" description="restore the original management console">
+		<res-undeploy hostname="localhost"
+			portnumber="${server.port}"
+			userid="resAdmin"
+			password="resAdmin"
+			ruleapp="monitoringevents"
+			version="1.0"
+			failonerror="false"/>
+		<module.deploy path="${executionserver.sample.dir}/${res.management.appli}" />
+		<waitfor maxwait="1" maxwaitunit="minute" checkevery="2" checkeveryunit="second" timeoutproperty="deployment.time.out">
+			<http url="http://localhost:${server.port}/res/monitoringevents.rss"/>
+		</waitfor>
+		<fail message="Deployment timed out. Check your server status." if="deployment.time.out"/>
+		<echo message="Deployment successful"/>           	     
+	</target>
+
+	<!-- clean -->
+	<target name="clean" description="delete the compiled classes">
+		<delete dir="${classes.dir}"/>
+		<delete dir="${build.dir}"/>
+	</target>
+
+</project>

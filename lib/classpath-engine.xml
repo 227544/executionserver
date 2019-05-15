@@ -1,0 +1,59 @@
+<!--
+
+  Licensed Materials - Property of IBM
+  5724X98 5724Y15 5655V82 5724X99 5724Y16 5655V89 5725B69 5655W88 5725C52 5655W90 5655Y31
+  Copyright IBM Corp. 1987, 2017 All Rights Reserved
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+
+-->
+<!--
+	This file lists the various JAR files and properties that are required to use the 
+	IBM ODM rule engine.
+
+	To use this file in your Ant build file:
+
+	1. Set the engine.lib.dir property:
+	<property name="engine.lib.dir" value="ODMHOME/executionserver/lib"/>
+	2. Import the classpath-engine.xml file.
+	<import file="${engine.lib.dir}/classpath-engine.xml"/>
+-->
+<project name="classpath-engine">
+
+	<patternset id="engine.classpath.patternset">
+		<!-- jrules-engine.jar contains all the parsing, ruleset, and engine classes -->
+		<include name="jrules-engine.jar"/>
+		<!-- bcel.jar is required for bytecode generation -->
+		<include name="bcel-*.jar"/>
+		<!-- jdom.jar is required by the profiler -->
+		<include name="jdom-*.jar" />
+
+		<include name="dom4j-*.jar" />
+		<include name="log4j-*.jar" />
+		<include name="openxml4j-*.jar" />
+	</patternset>
+
+	<!-- engine.classpath defines the class path required to use the engine on Java classes -->
+	<path id="engine.classpath">
+		<fileset dir="${engine.lib.dir}">
+			<patternset refid="engine.classpath.patternset"/>
+		</fileset>
+	</path>
+
+	<!-- engine.binding.classpath defines the class path that is required to use the engine with XML binding. -->
+	<patternset id="engine.binding.classpath.patternset">
+		<!-- engine.classpath -->
+		<patternset refid="engine.classpath.patternset"/>
+		<!-- XML binding requires sax.jar, dom.jar, jaxp-api.jar, xercesImpl.jar, jaxrpc-api.jar, jax-qname.jar.
+			Some are already in engine.classpath. -->
+		</patternset>
+
+	<!-- engine.binding.classpath defines the class path that is required to use the engine with XML binding.-->
+	<path id="engine.binding.classpath">
+		<fileset dir="${engine.lib.dir}">
+			<patternset refid="engine.binding.classpath.patternset"/>
+		</fileset>
+	</path>
+
+</project>

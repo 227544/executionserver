@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17 5655-Y31 5724-X98 5724-Y15 5655-V82                                     -->
+<!-- Copyright IBM Corp. 1987, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+
+
+<project name="REST API Management Sample" default="usage" basedir=".">
+
+	<description>How to Use the RES REST API Management in Java</description>
+
+	<property name="ds.home" location="${basedir}/../../.." />
+    <property name="odm.wlp.scripts.dir" value="${ds.home}/shared/samplesServer/wlp" />
+    <import file="${odm.wlp.scripts.dir}/build.xml"/>
+    <property name="executionserver.home" value="${ds.home}/executionserver"/>
+	<import file="${executionserver.home}/lib/classpath-executionserver.xml"/>
+
+	<!-- print help -->
+	<target name="usage">
+		<echo message="" />
+		<echo message="Usage:" />
+		<echo message="  ant generate.ruleapp  --> generate a rule application." />
+		<echo message="  ant deploy.ruleapp    --> deploy a new rule application." />
+		<echo message="  ant execute           --> execute a rule application." />
+		<echo message="  ant execute.json      --> execute a rule application with JSON parameters." />
+		<echo message="  ant clean        --> remove what has been added." />
+	</target>
+
+	<!-- initialize property variable -->
+	<target name="init">
+		<tstamp/>
+		<!-- build -->
+		<property name="data.dir" location="data"/>
+		<property name="src.dir" location="src"/>
+		<property name="classes.dir" location="bin"/>
+ 		<!-- classpath to compile the sample -->
+		<path id="compile.classpath">
+			<pathelement location="${classes.dir}"/>
+			<pathelement location="."/>
+			<fileset dir="${executionserver.home}/lib">
+				<include name="commons-logging-*.jar"/>
+	            <include name="httpclient.jar"/>
+				<include name="httpcore.jar"/>
+				<include name="commons-codec-*.jar"/>
+			</fileset>
+			<fileset dir="lib">
+				<include name="JSON4J.jar"/>
+			</fileset>
+		</path>
+		<!-- classpath to execute the sample -->
+		<path id="execution.classpath">
+		  <path refid="compile.classpath" />
+		  <pathelement location="${data.dir}"/>
+		</path>
+		<mkdir dir="${data.dir}"/>
+	</target>
+
+	<target name="build" description="Build all classes" depends="init">
+		<echo message="Compiling REST API Sample"/>
+		<mkdir dir="${classes.dir}"/>
+		<!-- Copy the server properties file-->
+		<copy file="${odm.wlp.scripts.dir}/build.properties"
+		      todir="${classes.dir}" />
+		<!-- Copy the server properties file -->
+		<copy todir="${classes.dir}/data">
+		  <fileset dir="${data.dir}"/>
+		</copy>
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}"   nowarn="true" source="1.7" target="1.7" verbose="off" debug="on" fork="true">
+			<classpath refid="compile.classpath"/>
+		</javac>
+	</target>
+
+	<!-- Check build command is installed -->
+	<target name="checkBuildCommandInstalled">
+		<available file="${ds.home}/buildcommand/rules-compiler/rules-compiler.jar" type="file" property="buildCommandInstalled"/>
+	</target>	
+	
+	<target name="abortIfNoBuildCommand" depends="checkBuildCommandInstalled" unless="buildCommandInstalled">
+		<fail message="Install Build Command feature to run this sample"/>
+	</target>
+
+	<!-- Use build command to build the decision service ruleapp -->
+	<target name="generate.ruleapp" depends="init, abortIfNoBuildCommand" description="Generate a rule application using build command">
+		<!-- Build the ruleapp with build command -->
+		<java jar="${ds.home}/buildcommand/rules-compiler/rules-compiler.jar" fork="true">	  
+		    <arg line="-config ${executionserver.home}/samples/restapi/Miniloan.properties"/>	  	
+		</java>			
+	</target>	
+		
+	<!-- Deploy a rule application -->
+	<target name="deploy.ruleapp" depends="build" description="Deploy a rule application by REST API">
+	  <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+			<classpath>
+				<path refid="execution.classpath"/>
+			</classpath>
+			<arg value="RuleApp"/>
+		</java>
+	</target>
+	<!-- Execute the ruleset for an amount of 5000 -->
+	<target name="execute" depends="build" description="Execute the ruleset">
+	  <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+			<classpath>
+				<path refid="execution.classpath"/>
+			</classpath>
+			<arg line="Execute 5000 idApproved"/>
+		</java>
+	  <antcall target="cleanClasses" />
+	</target>
+	<!-- Execute the rulset for an amount of 5000 using JSON -->
+	<target name="execute.json" depends="build" description="Execute the ruleset with JSON request">
+		  <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+				<classpath>
+					<path refid="execution.classpath"/>
+				</classpath>
+				<arg line="ExecuteJSON 5000 idApproved"/>
+			</java>
+		  <antcall target="cleanClasses" />
+		</target>
+	<!-- Execute the ruleset for an amount of 500000 -->
+	<target name="executeNotApproved" depends="build" description="Execute the ruleset">
+	  <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+			<classpath>
+				<path refid="execution.classpath"/>
+			</classpath>
+			<arg line="Execute 500000 idNotApproved"/>
+		</java>
+	  <antcall target="cleanClasses" />
+	</target>
+	<!-- Execute the ruleset for an amount of 500000 using JSON -->
+	<target name="executeNotApproved.json" depends="build" description="Execute the ruleset with JSON request">
+		 <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+			<classpath>
+				<path refid="execution.classpath"/>
+			</classpath>
+			<arg line="ExecuteJSON 500000 idNotApproved"/>
+		</java>
+		<antcall target="cleanClasses" />
+	</target>
+	<!-- Remove the ruleapp and the xom -->
+	<target name="clean" depends="build" description="Remove the ruleapp, the xom and the lib">
+	  <java dir="." classname="client.JavaClient" fork="yes" failonerror="yes">
+			<classpath>
+				<path refid="execution.classpath"/>
+			</classpath>
+			<arg value="Clean"/>
+		</java>
+	  <antcall target="cleanClasses" />
+	  <delete failonerror="false"  dir="data" />
+	</target>
+
+	<!-- utilities -->
+	<target name="cleanClasses" depends="init" description="Delete the compiled classes">
+	  <delete failonerror="false"  dir="${classes.dir}" />
+	</target>
+
+</project>

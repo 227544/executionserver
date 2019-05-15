@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17 5655-Y31 5724-X98 5724-Y15 5655-V82          -->
+<!-- Copyright IBM Corp. 1987, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+
+
+<project name="Rulesession application build targets" default="install" basedir=".">
+	<property name="ds.home" value="${basedir}/../../.." />
+	<property file="${ds.home}/shared/samplesServer/wlp/build.properties" />
+	<property name="executionserver.home" value="${ds.home}/executionserver"/>	
+	<property name="odm.wlp.scripts.dir" value="${ds.home}/shared/samplesServer/wlp" />
+	<import file="${odm.wlp.scripts.dir}/build.xml" />
+	<!-- Import RES classpath -->
+	<import file="${executionserver.home}/lib/classpath-executionserver.xml"/>
+
+	<!-- Define RES ant tasks -->
+	<taskdef resource="res-tasks.properties">
+		<classpath refid="executionserver.tools.classpath"/>
+	</taskdef>
+
+	<!-- Initialize property variable -->
+	<target name="init">
+		<property name="project.name" value="miniloan-rest" />
+		<property name="web.src" value="./${project.name}/src/main/webapp" />
+		<property name="projects.dir" value="${executionserver.home}/samples/j2eerulesession/projects" />
+		<property name="build.dir" value="./${project.name}/target" />
+		<property name="descriptor.dir" value="./${project.name}/src/main/webapp/WEB-INF" />
+		<property name="appwar" value="miniloan-rest.war" />
+		<property name="classes.dir" value="${projects.dir}/miniloan-xom/classes" />
+		<!-- Rule Execution Server properties -->
+		<property name="res.user" value="resAdmin"/>
+		<property name="res.password" value="resAdmin"/>
+		<property name="res.url" value="http://${server.host}:${server.port}/res" />
+	</target>
+
+	<!-- Check build command is installed -->
+	<target name="checkBuildCommandInstalled">
+		<available file="${ds.home}/buildcommand/rules-compiler/rules-compiler.jar" type="file" property="buildCommandInstalled"/>
+	</target>	
+	
+	<target name="abortIfNoBuildCommand" depends="checkBuildCommandInstalled" unless="buildCommandInstalled">
+		<fail message="Install Build Command feature to run this sample"/>
+	</target>
+
+	<!-- Use build command to build the miniloan decision service ruleapp -->
+	<target name="buildMiniloan" depends="init, abortIfNoBuildCommand" >
+		<mkdir dir="${projects.dir}"/>
+		<mkdir dir="${build.dir}"/>
+		<!-- Copy Miniloan from the gettingstarted directory -->
+	    <copy  todir="${projects.dir}/Miniloan Service">
+		       <fileset dir="${ds.home}/gettingstarted/DecisionServer/answer/Miniloan Service"/>
+		</copy>
+	    <copy  todir="${projects.dir}/miniloan-xom">
+		       <fileset dir="${ds.home}/gettingstarted/DecisionServer/start/miniloan-xom"/>
+		</copy>
+		<!-- Compile the Web classes -->
+		<delete failonerror="false">
+			<fileset dir="${classes.dir}" includes="**/*.class" />
+		</delete>
+		<mkdir dir="${classes.dir}" />
+		<path id="xom.classpath">
+			<fileset dir="${executionserver.home}/lib">
+				<include name="jrules-engine.jar" />
+			</fileset>
+		</path>
+		<!-- Add a deployment configuration -->
+	    <copy file="${executionserver.home}/samples/j2eerulesession/Miniloan.dep" 
+		      todir="${projects.dir}/Miniloan Service/deployment/" 
+			  overwrite="true" />
+		<!-- Build the ruleapp with build command -->
+		<java jar="${ds.home}/buildcommand/rules-compiler/rules-compiler.jar" fork="true">	  
+		    <arg line="-config ${executionserver.home}/samples/j2eerulesession/Miniloan.properties"/>	  	
+		</java>			
+		<!-- Clean intermediate directories -->
+		<delete failonerror="false"  dir="${projects.dir}" />
+	</target>	
+
+	<!-- Build and deploy the ruleapp to the RES -->
+	<target name="deploy" depends="init, buildMiniloan" description="Deploy Miniloan decision service">
+		<res-deploy file="${build.dir}/my_deployment.jar"
+			hostname="${server.host}"
+			portnumber="${server.port}"
+			userid="${res.user}"
+			password="${res.password}"
+			mergingpolicy="ADD_AT_END_MERGING_POLICY"
+			versioningpolicy="MAJOR_VERSION_POLICY"
+			failonerror="true"/>
+	</target>
+	
+
+
+	<!-- Package the Web Application into a WAR file -->
+	<target name="war" depends="init" >
+
+		<war destfile="${build.dir}/${appwar}" webxml="${descriptor.dir}/web.xml">
+			<fileset dir="${web.src}" includes="**/*.*" excludes="/WEB-INF/web.xml" />
+		</war>
+	</target>
+
+	<target name="install" depends="deploy, war" description="Deploys the Miniloan REST Web Application on the server">
+		<echo message="Deploys the Rulesession Web Application on the server" />
+		<module.deploy path="${build.dir}/${appwar}" />
+		<echo message="Rulesession application ready." />
+	</target>
+
+	<!-- Utilities -->
+	<target name="clean" depends="init, undeployMiniloan">
+		<delete failonerror="false" includeEmptyDirs="true">
+			<fileset dir="${build.dir}" includes="**/*" />
+		</delete>
+	</target>
+
+	<target name="undeployMiniloan" depends="init" description="Undeploys the Miniloan decision service from the RES">
+		<res-undeploy ruleapp="my_deployment"
+			hostname="${server.host}"
+			portnumber="${server.port}"
+			userid="${res.user}"
+			password="${res.password}"
+			failonerror="false"/>
+		<res-undeploy-xom jarName="miniloanxom.jar"
+			hostname="${server.host}"
+			portnumber="${server.port}"
+			userid="${res.user}"
+			password="${res.password}"
+			failonerror="false"/>
+		<res-undeploy-xom libName="my_deployment_1.0"
+			hostname="${server.host}"
+			portnumber="${server.port}"
+			userid="${res.user}"
+			password="${res.password}"
+			failonerror="false"/>
+	</target>
+	
+</project>

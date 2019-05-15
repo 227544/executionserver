@@ -1,0 +1,114 @@
+
+property uuid "e812de9b-3e82-412f-9505-1e3736c3d277"
+package loan;
+
+
+public class Borrower
+        extends java.io.Serializable
+{
+
+    public class Bankruptcy
+            extends java.io.Serializable
+    {
+        public readonly int chapter;
+        public readonly java.util.Date date;
+        public readonly string reason;
+        public Bankruptcy(loan.Borrower arg1, java.util.Date arg2, int arg3, string arg4);
+    }
+
+    public class SSN
+            extends java.io.Serializable
+    {
+        public readonly string areaNumber;
+        public readonly int digits;
+        public readonly string fullNumber;
+        public readonly string groupCode;
+        public readonly string serialNumber;
+        public SSN(loan.Borrower arg1, string arg2);
+        public SSN(loan.Borrower arg1, string arg2, string arg3, string arg4);
+        public string toString();
+    }
+    public readonly int age;
+    public readonly java.util.Date birthDate;
+    public int creditScore;
+    public readonly string firstName;
+    public readonly string lastName;
+    public readonly int latestBankruptcyChapter;
+    public readonly java.util.Date latestBankruptcyDate;
+    public readonly string latestBankruptcyReason;
+    public loan.Borrower spouse;
+    public readonly loan.Borrower.SSN ssn;
+    public int yearlyIncome;
+    public string zipCode;
+    public Borrower(string firstName, string lastName, java.util.Date birthDate, string ssn);
+    public int getBankruptcyAge();
+    public boolean hasLatestBankrupcy();
+    public void setLatestBankruptcy(java.util.Date arg1, int arg2, string arg3);
+    public string toString();
+}
+
+public class DateUtil
+{
+    public DateUtil();
+    public static java.util.Date addDays(java.util.Date arg1, int arg2);
+    public static java.util.Date dateAsDay(java.util.Date arg);
+    public static string format(java.util.Date arg);
+    public static int getAge(java.util.Date arg1, java.util.Date arg2);
+    public static int getDuration(java.util.Date arg1, java.util.Date arg2);
+    public static java.util.Iterator iterator(java.util.Date arg1, java.util.Date arg2);
+    public static java.util.Date makeDate(int arg1, int arg2, int arg3);
+    public static java.util.Date now();
+}
+
+public class Loan
+        extends loan.LoanUtil, java.io.Serializable
+{
+    public int amount;
+    public readonly int duration;
+    public double loanToValue;
+    public double monthlyRepayment
+                property update "true";
+    public int numberOfMonthlyPayments;
+    public java.util.Date startDate;
+    public double yearlyInterestRate
+                property update "true";
+    public readonly double yearlyRepayment;
+    public Loan(java.util.Date startDate, int numberOfMonthlyPayments, int amount, double loanToValue);
+    public string toString();
+}
+
+public class LoanUtil
+{
+    public LoanUtil();
+    public static boolean containsOnlyDigits(string arg);
+    public static string formattedAmount(double arg);
+    public static string formattedPercentage(double arg);
+    public static double getMonthlyRepayment(double amount, int months, double rate);
+}
+
+public class Report
+        extends loan.LoanUtil
+{
+    public boolean approved;
+    public readonly loan.Borrower borrower;
+    public int corporateScore;
+    public string grade domain {"A", "B", "C", "D", "E"}
+                property update "true";
+    public readonly string insurance;
+    public double insuranceRate;
+    public boolean insuranceRequired;
+    public readonly loan.Loan loan;
+    public readonly string message;
+    public readonly java.util.List messages domain 0,*;
+    public boolean validData;
+    public Report(loan.Borrower arg1, loan.Loan arg2);
+    public void addCorporateScore(int arg);
+    public void addMessage(string arg);
+    public void approveLoan(string message)
+                property update "true";
+    public void rejectData(string message);
+    public void rejectLoan(string message)
+                property update "true";
+    public string toString();
+}
+

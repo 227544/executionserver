@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ilog.rules.studio.model.brl:ActionRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ilog.rules.studio.model.brl="http://ilog.rules.studio/model/brl.ecore">
+  <eAnnotations source="ilog.rules.custom_properties">
+    <details key="historyVersion" value="false"/>
+    <details key="editable" value="true"/>
+    <details key="modified" value="false"/>
+    <details key="creationDate" value="21 Jul 2004 06:42:40 GMT"/>
+    <details key="lastModificationDate" value="26 Jul 2004 10:04:59 GMT"/>
+  </eAnnotations>
+  <name>Stock Name</name>
+  <uuid>aeea4289-0e72-48ce-8277-c760b9831fd7</uuid>
+  <priority>minimum</priority>
+  <locale>en_US</locale>
+  <definition><![CDATA[if
+	the stock of order is "Company X" 
+then
+	set the status of report to "Blocked" ;
+	set the reasons of report to "BlackListStocks" ;]]></definition>
+</ilog.rules.studio.model.brl:ActionRule>

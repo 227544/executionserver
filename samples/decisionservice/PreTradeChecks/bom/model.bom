@@ -1,0 +1,125 @@
+
+property loadGetterSetterAsProperties "true"
+property origin "xom:/PreTradeChecks//PreTradeChecks-xom"
+property uuid "305f2dc1-d70b-433f-aae4-63a0b57cd4fe"
+package ibm.com;
+
+
+public final class ActionType
+        extends java.lang.Enum
+{
+    domain {static BUY, static SELL}
+    public static final readonly ibm.com.ActionType BUY;
+    public static final readonly ibm.com.ActionType SELL;
+    public static ibm.com.ActionType fromValue(string arg);
+    public string value();
+    public static ibm.com.ActionType valueOf(string arg);
+    public static ibm.com.ActionType[] values();
+}
+
+public final class Currency
+        extends java.lang.Enum
+{
+    domain {static US_DOLLAR, static EURO, static POUND, static JP_REN, static PRCRMB, static SG_DOLLAR}
+    public static final readonly ibm.com.Currency EURO;
+    public static final readonly ibm.com.Currency JP_REN;
+    public static final readonly ibm.com.Currency POUND;
+    public static final readonly ibm.com.Currency PRCRMB;
+    public static final readonly ibm.com.Currency SG_DOLLAR;
+    public static final readonly ibm.com.Currency US_DOLLAR;
+    public static ibm.com.Currency fromValue(string arg);
+    public string value();
+    public static ibm.com.Currency valueOf(string arg);
+    public static ibm.com.Currency[] values();
+}
+
+public class Customer
+{
+    public float bankStockPosition;
+    public float bondPosition;
+    public string currency;
+    public float currentValue;
+    public float futurPosition;
+    public float initialValue;
+    public string name;
+    public float oilStockPosition;
+    public string owner;
+    public float railStockPosition;
+    public float sectorPosition;
+    public float stockPosition;
+    public Customer();
+}
+
+public class Order
+{
+    public string action;
+    public int amount;
+    public string currency;
+    public javax.xml.datatype.XMLGregorianCalendar dateTime;
+    public string destination;
+    public string exchange;
+    public string id;
+    public string reasons;
+    public ibm.com.SectorType sector;
+    public string securityType;
+    public string status;
+    public string stock;
+    public Order();
+    public void setAction(ibm.com.ActionType arg);
+    public void setSecurityType(ibm.com.SecurityType arg);
+}
+
+public final class ReasonsType
+        extends java.lang.Enum
+{
+    domain {static CUSTOMER_PREFERENCES, static BLACK_LIST_STOCKS, static BAD_CLIENT}
+    public static final readonly ibm.com.ReasonsType BAD_CLIENT;
+    public static final readonly ibm.com.ReasonsType BLACK_LIST_STOCKS;
+    public static final readonly ibm.com.ReasonsType CUSTOMER_PREFERENCES;
+    public static ibm.com.ReasonsType fromValue(string arg);
+    public string value();
+    public static ibm.com.ReasonsType valueOf(string arg);
+    public static ibm.com.ReasonsType[] values();
+}
+
+public final class SectorType
+        extends java.lang.Enum
+{
+    domain {static TECH, static OIL, static RAIL, static BANK}
+    public static final readonly ibm.com.SectorType BANK;
+    public static final readonly ibm.com.SectorType OIL;
+    public static final readonly ibm.com.SectorType RAIL;
+    public static final readonly ibm.com.SectorType TECH;
+    public static ibm.com.SectorType fromValue(string arg);
+    public string value();
+    public static ibm.com.SectorType valueOf(string arg);
+    public static ibm.com.SectorType[] values();
+}
+
+public final class SecurityType
+        extends java.lang.Enum
+{
+    domain {static BONDS, static FUTURES, static STOCK}
+    public static final readonly ibm.com.SecurityType BONDS;
+    public static final readonly ibm.com.SecurityType FUTURES;
+    public static final readonly ibm.com.SecurityType STOCK;
+    public static ibm.com.SecurityType fromValue(string arg);
+    public string value();
+    public static ibm.com.SecurityType valueOf(string arg);
+    public static ibm.com.SecurityType[] values();
+}
+
+public final class StatusType
+        extends java.lang.Enum
+{
+    domain {static ACCEPTED, static REJECTED, static PENDING, static BLOCKED}
+    public static final readonly ibm.com.StatusType ACCEPTED;
+    public static final readonly ibm.com.StatusType BLOCKED;
+    public static final readonly ibm.com.StatusType PENDING;
+    public static final readonly ibm.com.StatusType REJECTED;
+    public static ibm.com.StatusType fromValue(string arg);
+    public string value();
+    public static ibm.com.StatusType valueOf(string arg);
+    public static ibm.com.StatusType[] values();
+}
+

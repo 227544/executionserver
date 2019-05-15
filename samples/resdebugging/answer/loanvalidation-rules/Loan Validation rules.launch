@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><launchConfiguration type="com.ibm.rules.studio.decisionservice.launching.DecisionOperation">
+<stringAttribute key="com.ibm.rules.studio.decisionservice.ui.OPERATION_PATH" value="/loanvalidation-rules/deployment/loanvalidation-rulesOperation"/>
+<mapAttribute key="ilog.rules.studio.launching.RULESET_PARAMETERS_FUNCT_SIGN">
+<mapEntry key="borrower" value="function loan.Borrower get_borrower_value()"/>
+<mapEntry key="loan" value="function loan.Loan get_loan_value()"/>
+</mapAttribute>
+<mapAttribute key="ilog.rules.studio.launching.RULESET_PARAMETERS_FUNCT_VALUES">
+<mapEntry key="borrower" value="loan.Borrower borrower = new loan.Borrower(&quot;John&quot;, &quot;Doe&quot;,loan.DateUtil.makeDate(1968,java.util.Calendar.MAY,12),&quot;123456789&quot;);&#13;&#10;borrower.zipCode = &quot;91320&quot;;&#13;&#10;borrower.creditScore = 600;&#13;&#10;borrower.yearlyIncome = 100000;&#13;&#10;return borrower;"/>
+<mapEntry key="loan" value="loan.Loan loan = new loan.Loan(loan.DateUtil.makeDate(2005,java.util.Calendar.JUNE,1),72,100000,0.7d);&#13;&#10;return loan;"/>
+</mapAttribute>
+<mapAttribute key="ilog.rules.studio.launching.RULESET_PARAMETERS_NAMES">
+<mapEntry key="borrower" value="borrower"/>
+<mapEntry key="loan" value="loan"/>
+</mapAttribute>
+<mapAttribute key="ilog.rules.studio.launching.RULESET_PARAMETERS_SIMPLE_VALUES">
+<mapEntry key="borrower" value=""/>
+<mapEntry key="loan" value=""/>
+</mapAttribute>
+<mapAttribute key="ilog.rules.studio.launching.RULESET_PARAMETERS_TYPES">
+<mapEntry key="borrower" value="2"/>
+<mapEntry key="loan" value="2"/>
+</mapAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/loanvalidation-rules"/>
+<listEntry value="/loanvalidation-rules"/>
+<listEntry value="/loanvalidation-rules/deployment/loanvalidation-rulesOperation.dop"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+<listEntry value="4"/>
+<listEntry value="1"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="loanvalidation-rules"/>
+</launchConfiguration>

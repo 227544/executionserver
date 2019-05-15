@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17 5655-Y31 5724-X98 5724-Y15 5655-V82                                     -->
+<!-- Copyright IBM Corp. 1987, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+
+
+<project default="usage" basedir=".">
+  <property name="executionserver.home" value="${basedir}/../../.." />
+  <property name="ds.home" location="${basedir}/../../../.." />
+  <property name="java.home" location="${ds.home}/jdk" />
+  <import file="${executionserver.home}/lib/classpath-executionserver.xml" />
+
+  <property name="classes.dir" location="../classes" />
+  <property name="src.dir" location="../src" />
+
+  <target name="usage">
+    <!-- *********************************************************-->
+    <echo message="Targets:" />
+    <echo message="* build          : compile the java classes" />
+    <echo message="* run            : check ruleset validity" />
+    <echo message="* displayruleapp : display RuleApp list" />
+    <echo message="* clean          : delete the compiled classes" />
+    <!-- ******************************************************** -->
+  </target>
+
+  <!-- Utilities target to build the classes -->
+  <target name="build" depends="check.weblogic12.env">
+    <mkdir dir="${classes.dir}" />
+    <echo message="Compiling the Weblogic12 jmx classes" />
+    <echo message="using weblogic12 at ${WL_HOME}" />
+    <javac includeantruntime="false" fork="true" srcdir="${src.dir}" destdir="${classes.dir}" verbose="off" debug="on" optimize="on" includes="**/JmxRemoteImpl.java,**/CommonHandler.java,**/Weblogic12Client.java">
+      <classpath refid="weblogic12.classpath" />
+    </javac>
+  </target>
+
+  <target name="run" depends="build" description="check ruleset validity">
+    <echo message="Running with Weblogic12" />
+    <java fork="yes" classname="jmxremote.Weblogic12Client" failonerror="yes">
+      <classpath refid="weblogic12.classpath" />
+    </java>
+  </target>
+
+  <target name="displayruleapp" depends="build" description="display RuleApp list">
+    <echo message="Running with Weblogic12" />
+    <java fork="yes" classname="jmxremote.Weblogic12Client" failonerror="yes">
+      <arg value="-displayall" />
+      <classpath refid="weblogic12.classpath" />
+    </java>
+  </target>
+
+  <target name="clean" description="delete the compiled classes">
+    <echo message="Cleaning ${classes.dir} directory" />
+    <delete dir="${classes.dir}" quiet="true" />
+  </target>
+
+  <target name="check.weblogic12.env">
+    <property environment="env" />
+    <property file="build.properties" />
+    <available property="weblogic12.env" file="${WL_HOME}" type="dir" />
+    <antcall target="test.weblogic12.env" />
+    <available property="weblogic12.beaenv" file="${BEA_HOME}" type="dir" />
+    <antcall target="test.weblogic12.beaenv" />
+    <!--classpath for weblogic12-->
+    <path id="weblogic12.classpath">
+	<pathelement location="${WL_HOME}/server/lib/weblogic.jar"/>
+	<pathelement location="${WL_HOME}/server/lib/wljmsclient.jar"/>
+	<pathelement location="${executionserver.home}/lib/jrules-res-manage-tools.jar"/>
+	<pathelement location="${executionserver.weblogic12.dir}/jrules-res-session-WL12.jar"/>
+        <pathelement path="${classes.dir}" />
+        <pathelement path=".." />
+        <pathelement path="." />
+        <pathelement path="${executionserver.home}/lib/log4j-1.2.8.jar" />
+    </path>
+  </target>
+
+  <target name="test.weblogic12.env" unless="weblogic12.env">
+    <fail message="Please set properly WL_HOME property." />
+  </target>
+  <target name="test.weblogic12.beaenv" unless="weblogic12.beaenv">
+    <fail message="Please set properly BEA_HOME property." />
+  </target>  
+</project>

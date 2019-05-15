@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17 5655-Y31 5724-X98 5724-Y15 5655-V82                                     -->
+<!-- Copyright IBM Corp. 1987, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+
+
+
+<!-- Ruleapp Management Tutorial -->
+<project name="ruleppmanagement" default="usage" basedir=".">
+	<property name="ds.home" value="${basedir}/../../.." />
+	<property name="executionserver.home" location="${ds.home}/executionserver" />
+	<!-- Import RES classpath -->
+	<import file="${executionserver.home}/lib/classpath-executionserver.xml"/>
+	<!-- Import Samples server properties -->
+    <property name="odm.wlp.scripts.dir" value="${ds.home}/shared/samplesServer/wlp" />
+    <import file="${odm.wlp.scripts.dir}/build.xml"/>
+
+	<!-- Define RES ant tasks -->
+	<taskdef resource="res-tasks.properties">
+		<classpath refid="executionserver.tools.classpath"/>
+	</taskdef>
+
+	<!-- Rule Execution Server properties -->
+	<property name="hostname" value="localhost"/>
+	<property name="port" value="${server.port}"/>
+	<property name="user" value="resAdmin"/>
+	<property name="password" value="resAdmin"/>
+
+	<target name="usage">
+		<echo message="deploy  --> deploy data/loanvalidation_for_resruleappmngt.jar"/>
+		<echo message="fetch   --> fetch loanvalidation_for_resruleappmngt ruleapp to work/loanvalidation.jar"/>
+	</target>
+
+	<!-- Deploy loan valition ruleapp to the RES -->
+	<target name="deploy" depends="undeploy">
+		<res-deploy file="${basedir}/data/loanvalidation_for_resruleappmngt.jar"
+			hostname="${hostname}"
+			portnumber="${port}"
+			userid="${user}"
+			password="${password}"
+			mergingpolicy="ADD_AT_END_MERGING_POLICY"
+			versioningpolicy="MAJOR_VERSION_POLICY"
+			failonerror="true"/>
+	</target>
+
+	<!-- Fetch loan validation ruleapp from the RES -->
+	<target name="fetch">
+		<res-fetch
+			destfile="${basedir}/work/loanvalidation.jar"
+			ruleapp="loanvalidation_for_resruleappmngt"
+			version="1.0"
+			hostname="${hostname}"
+			portnumber="${port}"
+			userid="${user}"
+			password="${password}"
+			failonerror="true"/>
+	</target>
+	
+	<!-- UnDeploy loan valition ruleapp to the RES -->
+	<target name="undeploy">	
+		<res-undeploy hostname="${hostname}"
+			portnumber="${server.port}"
+			userid="${user}"
+			password="${password}"
+			ruleapp="loanvalidation_for_resruleappmngt"
+			version="1.0"
+			failonerror="false"/>
+    </target>
+</project>

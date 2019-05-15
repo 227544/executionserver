@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.ibm.rules.studio.model.decisionservice:Operation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:com.ibm.rules.studio.model.decisionservice="http://com.ibm.rules.studio/model/decisionservice.ecore" rulesetName="loanvalidation_rulesRuleset" usingRuleflow="true" ruleflowName="loanvalidation" targetRuleProjectName="loanvalidation-rules">
+  <name>loanvalidation-rulesOperation</name>
+  <uuid>9d6997d5-8a36-4feb-8eab-f18de6f14927</uuid>
+  <referencedVariables variableName="borrower" variableSetName="loanvalidation-rulesParameters">
+    <variableSet href="../rules/loanvalidation-rulesParameters.var#18c7ab02-22e3-44d7-a14a-481b8ee0f90f"/>
+  </referencedVariables>
+  <referencedVariables variableName="loan" variableSetName="loanvalidation-rulesParameters" direction="IN_OUT">
+    <variableSet href="../rules/loanvalidation-rulesParameters.var#18c7ab02-22e3-44d7-a14a-481b8ee0f90f"/>
+  </referencedVariables>
+  <referencedVariables variableName="report" variableSetName="loanvalidation-rulesParameters" direction="OUT">
+    <variableSet href="../rules/loanvalidation-rulesParameters.var#18c7ab02-22e3-44d7-a14a-481b8ee0f90f"/>
+  </referencedVariables>
+  <ruleflow href="../rules/loanvalidation.rfl#d40c08c0-56e4-439a-954a-77811a8242b6"/>
+  <targetRuleProject href="../../loanvalidation-rules#4dd4467b-b7da-4c83-9d5e-d3494ee618f8"/>
+</com.ibm.rules.studio.model.decisionservice:Operation>

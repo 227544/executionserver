@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ilog.rules.studio.model.base:RulePackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ilog.rules.studio.model.base="http://ilog.rules.studio/model/base.ecore">
+  <eAnnotations source="ilog.rules.custom_properties">
+    <details key="isRoot" value="false"/>
+    <details key="isLeaf" value="false"/>
+    <details key="isAbstract" value="false"/>
+    <details key="editable" value="true"/>
+    <details key="modified" value="false"/>
+    <details key="creationDate" value="21 Jul 2004 06:42:29 GMT"/>
+    <details key="lastModificationDate" value="21 Jul 2004 06:42:29 GMT"/>
+  </eAnnotations>
+  <name>CheckStock</name>
+  <uuid>2e9acbc8-2a47-43e0-b1a5-02f5432aa04c</uuid>
+  <orderedMembers>Stock Name</orderedMembers>
+</ilog.rules.studio.model.base:RulePackage>

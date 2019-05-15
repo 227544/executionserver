@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model.base:RulePackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:model.base="http://ilog.rules.studio/model/base.ecore">
+  <name>borrower</name>
+  <uuid>d94924c0-cbdd-4d00-807d-2d96dc46f98f</uuid>
+</model.base:RulePackage>

@@ -1,0 +1,143 @@
+<!--
+
+  Licensed Materials - Property of IBM
+  5724X98 5724Y15 5655V82 5724X99 5724Y16 5655V89 5725B69 5655W88 5725C52 5655W90 5655Y31
+  Copyright IBM Corp. 1987, 2017 All Rights Reserved
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+
+-->
+<!--
+	This file lists the various JAR files and properties that are required to build and run
+	IBM ODM execution server.
+	DO NOT change the order of the JAR files.
+
+	To use this file in your Ant build file:
+
+	1. Set the executionserver.home property:
+	<property name="executionserver.home" value="ODMHOME/executionserver"/>
+	2. Import classpath-executionserver.xml:
+	<import file="${executionserver.home}/lib/classpath-executionserver.xml"/>
+-->
+<project name="classpath-executionserver">
+
+	<!-- Set the executionserver.lib.dir property before you import classpath-engine.xml file. -->
+	<property name="executionserver.lib.dir" value="${executionserver.home}/lib"/>
+	<property name="engine.lib.dir" value="${executionserver.home}/lib"/>
+	<import file="${executionserver.lib.dir}/classpath-engine.xml"/>
+
+	<!-- Properties used by samples to reference application server ports -->
+	<!-- You can use these properties to point to an application-server specific JAR file, such as jrules-res-session-XXX.jar -->
+	<property name="executionserver.jboss6.dir" value="${executionserver.home}/applicationservers/JBoss6EAP"/>
+	<property name="executionserver.tomcat7.dir" value="${executionserver.home}/applicationservers/tomcat7"/>
+	<property name="executionserver.websphere85.dir" value="${executionserver.home}/applicationservers/WebSphere85"/>
+ 	<property name="executionserver.weblogic12.dir" value="${executionserver.home}/applicationservers/WebLogic12"/>
+ 	<property name="executionserver.wlp855.dir" value="${executionserver.home}/applicationservers/WLP855"/>
+	
+	<fileset id="executionserver.j2se.war.lib" dir="${executionserver.home}/lib">
+		<patternset refid="executionserver.j2se.classpath.patternset"/>
+		<patternset refid="engine.binding.classpath.patternset"/>
+	</fileset>
+
+	<fileset id="executionserver.management.classpath" dir="${executionserver.home}/lib">
+		 <include name="jrules-res-manage-tools.jar"/>
+	</fileset>
+	
+	<patternset id="executionserver.j2se.classpath.patternset">
+		<include name="j2ee_connector-*.jar"/>
+		<include name="log4j-*.jar"/>
+		<include name="jrules-res-execution.jar"/>
+		<include name="slf4j*.jar"/>
+		<include name="mina*.jar"/>
+		<include name="http*.jar"/>
+		<include name="jackson*.jar"/>
+		<include name="commons-logging*.jar"/>
+		<patternset refid="engine.binding.classpath.patternset"/>
+	</patternset>
+
+	<path id="executionserver.j2se.classpath">
+		<fileset dir="${executionserver.home}/lib">
+			<patternset refid="executionserver.j2se.classpath.patternset"/>
+		</fileset>
+	</path>
+
+	<patternset id="executionserver.tools.classpath.patternset">
+		<include name="jrules-res-tools.jar"/>
+		<include name="commons-httpclient-*.jar"/>
+		<include name="commons-codec-*.jar"/>
+		<include name="commons-logging-*.jar"/>
+		<include name="http*.jar"/>
+		<patternset refid="engine.binding.classpath.patternset"/>
+	</patternset>
+
+	<path id="executionserver.tools.classpath">
+		<fileset dir="${executionserver.home}/lib">
+			<patternset refid="executionserver.tools.classpath.patternset"/>
+		</fileset>
+	</path>
+
+	<patternset id="executionserver.setup.classpath.patternset">
+		<include name="jrules-res-setup.jar"/>
+		<include name="xalan-*.jar"/>
+		<patternset refid="engine.classpath.patternset"/>
+	</patternset>
+
+	<path id="executionserver.setup.classpath">
+		<fileset dir="${executionserver.home}/lib">
+			<patternset refid="executionserver.setup.classpath.patternset"/>
+		</fileset>
+	</path>
+
+	<patternset id="executionserver.dsmbean.classpath.patternset">
+		<include name="jrules-res-dsmbean.jar"/>
+	</patternset>
+
+	<path id="executionserver.dsmbean.classpath">
+		<fileset dir="${executionserver.home}/lib">
+			<patternset refid="executionserver.dsmbean.classpath.patternset"/>
+		</fileset>
+		<fileset dir="${executionserver.home}/lib">
+			<include name="servlet-api-*.jar" /> 
+		</fileset>
+	</path>
+
+	<!-- 
+		This target allow to display the required jars for the RES JSE 
+		ant -f classpath-executionserver.xml display -Dexecutionserver.home=ODMHOME/executionserver
+	-->
+	<target name="display">
+		<property name="display.value" refid="executionserver.j2se.classpath"/>
+		<echo>## Classpath for JSE RES:${line.separator}${display.value}"</echo>
+	</target>
+
+	<!-- 
+		This target allow to copy the required jars for the RES JSE to a specified directory.
+		ant -f classpath-executionserver.xml copy -Dexecutionserver.home=ODMHOME/executionserver -Dtarget.copy.dir=TARGETDIR
+	-->
+	<target name="copy">
+		<fail unless="target.copy.dir" message="set the property target.copy.dir"/>
+		<property name="filesToCopy" refid="executionserver.j2se.classpath"/>
+		<mkdir dir="${target.copy.dir}"/>
+		<copy todir="${target.copy.dir}" overwrite="true" failonerror="false">
+			<fileset dir="${executionserver.home}/lib">
+				<patternset refid="executionserver.j2se.classpath.patternset"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- 
+		This target allow to zip the required jars for the RES JSE to a specified file.
+		ant -f classpath-executionserver.xml copy -Dtarget.zip.dir=TARGETDIR -Dexecutionserver.home=ODMHOME/executionserver
+	-->
+	<target name="package">
+		<fail unless="target.zip.dir" message="set the property target.zip.dir"/>
+		<property name="filesToCopy" refid="executionserver.j2se.classpath"/>
+		<mkdir dir="${target.zip.dir}"/>
+		<zip destfile="${target.zip.dir}/jse-res-jars.zip" update="false">
+			<fileset dir="${executionserver.home}/lib">
+				<patternset refid="executionserver.j2se.classpath.patternset"/>
+			</fileset>
+		</zip>
+	</target>
+</project>

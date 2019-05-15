@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17 5655-Y31 5724-X98 5724-Y15 5655-V82                                     -->
+<!-- Copyright IBM Corp. 1987, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+
+
+<project name="J2SE RES Sample" default="deploy.ruleapp" basedir=".">
+
+	<description>How to Use a Rule Session in J2SE</description>
+
+	<property name="ds.home" location="${basedir}/../../.." />
+	<property name="executionserver.home" value="${ds.home}/executionserver"/>
+	<import file="${executionserver.home}/lib/classpath-executionserver.xml"/>
+
+	<taskdef resource="res-tasks.properties">
+		<classpath refid="executionserver.tools.classpath"/>
+	</taskdef>
+	
+	<!-- Deploy the ruleapp on files -->
+	<target name="deploy.ruleapp" depends="setupra" description="Deploy the ruleapp on Execution Server">
+		<property name="rulesapp.name" value="data/test_deployment.jar"/>
+		<res-write-file failonerror="true"
+			dir="res_data" file="${rulesapp.name}"
+			mergingpolicy="ADD_AT_END_MERGING_POLICY"
+			versioningpolicy="MAJOR_VERSION_POLICY"/>
+	</target>
+
+	<target name="setupra"  description="Change the persistence mode">
+		<taskdef name="res-setup" classname="ilog.rules.res.setup.SetupTask">
+			<classpath refid="executionserver.setup.classpath"/>
+		</taskdef>
+		<res-setup  XUConfigInput="${executionserver.home}/bin/ra.xml"
+		            XUConfigOutput="ra.xml">
+			<property name="persistence.type" value="file" />
+		</res-setup>
+	</target>
+
+
+	<!-- Clean -->
+	<target name="clean"  description="Delete the deployed ruleapp">
+	  <delete failonerror="false"  dir="res_data" />
+	  <delete failonerror="false"  dir="res_xom" />
+	</target>
+
+</project>

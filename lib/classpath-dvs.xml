@@ -1,0 +1,49 @@
+<!--
+
+  Licensed Materials - Property of IBM
+  5724X98 5724Y15 5655V82 5724X99 5724Y16 5655V89 5725B69 5655W88 5725C52 5655W90 5655Y31
+  Copyright IBM Corp. 1987, 2017 All Rights Reserved
+  US Government Users Restricted Rights - Use, duplication or
+  disclosure restricted by GSA ADP Schedule Contract with
+  IBM Corp.
+
+-->
+<!--
+	This file lists the various jar files and properties required to build and run
+	Decision Validation Services.
+	Jar files ordering should NOT be changed.
+
+	To use this file in your Ant build file:
+
+	1. set the executionserver.home property
+	<property name="executionserver.home" value="ODMHOME/executionserver"/>
+	2. Import classpath-dvs.xml
+	<import file="${executionserver.home}/lib/classpath-dvs.xml"/>
+-->
+<project name="classpath-dvs">
+
+	<!-- executionserver.lib.dir property must be set before importing classpath-engine.xml file -->
+	<property name="executionserver.lib.dir" value="${executionserver.home}/lib"/>
+	<import file="${executionserver.lib.dir}/classpath-engine.xml"/>
+	<import file="${executionserver.lib.dir}/classpath-executionserver.xml"/>
+	<path id="dvs.classpath">
+	  <fileset dir="${executionserver.home}/lib">
+	    <include name="jrules-language.jar"/>
+	    <include name="jrules-dvs.jar"/>
+	  </fileset>
+	  <path refid="executionserver.j2se.classpath"/>
+	  <path refid="executionserver.tools.classpath"/>
+  </path>
+	<path id="dvs.j2se.execution.classpath">
+	  <fileset dir="${executionserver.home}/lib">
+	    <include name="jrules-language.jar"/>
+	    <include name="jrules-dvs.jar"/>
+	    <include name="poi-*.jar"/>
+	    <include name="xmlbeans-*.jar"/>
+	    <include name="dom4j-*.jar"/>
+	    <include name="icu4j-*.jar"/>
+	  </fileset>
+	  <path refid="executionserver.j2se.classpath"/>
+	  <path refid="executionserver.tools.classpath"/>
+  </path>
+</project>

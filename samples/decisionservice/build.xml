@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17 5655-Y31 5724-X98 5724-Y15 5655-V82                                     -->
+<!-- Copyright IBM Corp. 1987, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+<project name="Executing a hosted transparent decision service" default="run" basedir=".">
+    <property environment="env" />
+    <property name="ds.home" location="${basedir}/../../.." />
+    <property name="executionserver.home" location="${ds.home}/executionserver" />
+    <import file="${executionserver.home}/lib/classpath-executionserver.xml" />
+    <property file="${ds.home}/shared/samplesServer/wlp/build.properties"/>
+    <property file="${data.home}/wlp.properties"/>
+    <property name="odm.wlp.scripts.dir" value="${ds.home}/shared/samplesServer/wlp" />
+    <import file="${odm.wlp.scripts.dir}/build.xml"/>
+<!--  the location of the distribution directory              -->
+    <property name="output" location="output" />
+<!--  the location of the generated Open API client directory              -->
+    <property name="open_api_client" location="open_api_client" />
+<!--  the file name of the jar file                           -->
+    <property name="dist.jar" value="dssample.jar" />
+<!--  the binary directory                                    -->
+    <property name="bin" location="bin" />
+<!--  the source directory                                    -->
+    <property name="src" location="src/axis" />
+<!--  the source directory for the generated file             -->
+    <property name="srcgenerated" location="${src}" />
+<!--  the directory of the Apache Axis library                -->
+    <property name="axis.lib" location="lib" />
+<!--  the URL of the Decision Service Web Application         -->
+    <property name="decision.service.location" value="http://localhost:${server.port}/DecisionService/ws" />
+<!--  the ruleset path that will be exposed as a Web Service  -->
+    <property name="decision.service.ruleset.path" value="PreTradeChecksRuleApp/1.0/PreTradeChecks/1.0" />
+<!--  the URL used to retrieve the WSDL of the ruleset expposed as a web service -->
+    <property name="decision.service.url" value="${decision.service.location}/${decision.service.ruleset.path}?WSDL&amp;trace=true" />
+<!--  Compilation options                                     -->
+    <property name="javac.debug" value="true" />
+    <property name="javac.nowarn" value="true" />
+    <property name="javac.fork" value="true" />
+    <property name="javac.source" value="1.7" />
+<!--  Classpath for compilation and execution                 -->
+    <path id="classpath.id">
+        <fileset dir="${axis.lib}">
+            <include name="*.jar" />
+        </fileset>
+		<fileset dir="${executionserver.home}/lib">
+            <include name="saaj-api-*.jar" />
+            <include name="commons-logging-*.jar" />
+            <include name="commons-discovery-*.jar" />
+            <include name="jaxrpc-api-1.1.jar" />
+             <include name="axis-*.jar" />
+            <include name="wsdl4j-*.jar" />
+        </fileset>       
+    </path>
+<!--  Generation Axis Task Definition                         -->
+    <taskdef name="axis-wsdl2java" classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask">
+        <classpath refid="classpath.id" />
+    </taskdef>
+<!--  Clean up resources                                      -->
+    <target name="clean">
+        <delete failonerror="false" includeEmptyDirs="true">
+            <fileset dir="${output}" includes="**/*" />
+        </delete>
+        <delete failonerror="false" includeEmptyDirs="true">
+            <fileset dir="${bin}" includes="**/*" />
+        </delete>
+	<echo message="${srcgenerated}" />
+        <delete failonerror="true" includeEmptyDirs="true">
+            <fileset dir="${srcgenerated}" includes="decisionservice/axisclient/proxy/**/*" />
+        </delete>
+        <mkdir dir="${srcgenerated}" />
+        <mkdir dir="${output}" />
+        <mkdir dir="${bin}" />
+    </target>
+	<target name="clean.openapi">
+		<delete failonerror="false" includeEmptyDirs="true">
+            <fileset dir="${open_api_client}" includes="**/*" />
+        </delete>
+		<mkdir dir="${open_api_client}" />
+    </target>
+<!--  Ask Apache Axis to generate the client code             -->
+<!--  You can use url="${decision.service.url}" : the WSDL file comes from the server        -->
+<!--  You can use url="data/pretradecheck.wsdl" : the WSDL file comes from the file system   -->
+    <target name="generate" depends="clean">
+        <axis-wsdl2java output="${srcgenerated}" verbose="true" url="${decision.service.url}">
+            <mapping namespace="http://www.ibm.com" package="decisionservice.axisclient.proxy" />
+            <mapping namespace="http://www.ibm.com/rules/decisionservice/PreTradeChecksRuleApp/PreTradeChecks" package="decisionservice.axisclient.proxy.ds" />
+            <mapping namespace="http://www.ibm.com/rules/decisionservice/trace" package="decisionservice.axisclient.proxy.trace" />
+            <mapping namespace="http://www.ibm.com/rules/decisionservice/tracefilter" package="decisionservice.axisclient.proxy.tracefilter" />
+            <mapping namespace="http://www.ibm.com/rules/decisionservice/PreTradeChecksRuleApp/PreTradeChecks/param" package="decisionservice.axisclient.proxy.param" />
+        </axis-wsdl2java>
+    </target>
+<!--  Compilation                                             -->
+    <target name="build" depends="generate">
+        <javac includeantruntime="false" srcdir="${src}:${srcgenerated}" destdir="${bin}" debug="${javac.debug}" nowarn="${javac.nowarn}" source="${javac.source}" fork="${javac.fork}">
+            <classpath refid="classpath.id" />
+        </javac>
+        <jar destfile="${output}/${dist.jar}" basedir="${bin}" />
+    </target>
+<!--  Execute with Apache Axis Client Code - Input parameters are Java Object Instances  -->
+    <target name="run.axisclient" depends="build" description="Run the Apache Axis client">
+        <java classname="decisionservice.axisclient.Client" fork="true">
+            <classpath>
+                <pathelement location="${output}/${dist.jar}" />
+            </classpath>
+            <classpath refid="classpath.id" />
+        </java>
+    </target>
+<!--  Execute all samples                                                                -->
+    <target name="run" description="Run the java client" depends="build,run.axisclient">
+    </target>
+<!-- Generate Java project based on YAML file -->
+	<target name="generate.openapi.client" depends="clean.openapi" description="Generate a Java client project using Open API">
+		<java jar="${axis.lib}/swagger-codegen-cli-2.2.0.jar" fork="true">
+			<arg value="generate"/>
+			<arg value="-i"/>
+			<arg value="data/pretradecheck.yaml"/>
+			<arg value="-l"/>
+			<arg value="java"/>
+			<arg value="--library"/>
+			<arg value="jersey2"/>
+			<arg value="-o"/>
+			<arg value="${open_api_client}"/>
+		</java>
+		<echo message="OpenAPI client generated to ${open_api_client}"/>
+	</target>
+
+<!-- Copy test class to generated client -->
+	<target name="add.openapi.unit.test" description="Add a test class to OpenAPI generated client">
+			<copy file="src/openapi/SimpleApiTest.java"
+		      todir="${open_api_client}/src/test/java/io/swagger/client/api" />
+		<echo message="Test class added to ${open_api_client}/src/test/java/io/swagger/client/api"/>
+	</target>
+
+<!-- initialize property variable -->
+	<target name="init">
+		<tstamp/>
+		<!-- build -->
+		<property name="data.dir" location="output"/>
+		<property name="src.dir" location="src"/>
+		<property name="classes.dir" location="bin"/>
+		<!-- classpath to compile the sample -->
+		<path id="compile.classpath">
+			<pathelement location="${classes.dir}"/>
+			<pathelement location="."/>
+			<fileset dir="${executionserver.home}/lib">
+				<include name="commons-logging-*.jar"/>
+				<include name="httpclient.jar"/>
+				<include name="httpcore.jar"/>
+				<include name="commons-codec-*.jar"/>
+				<include name="jaxb-api-*.jar"/>
+			</fileset>
+		</path>
+		<mkdir dir="${data.dir}"/>
+	</target>
+	
+<!-- Targets to build and deploy the decision service- alternative to Task1 -->    
+
+<!--  the user to connect to the execution server console                   -->		
+	<property name="deploy.user"  		value="resAdmin" />
+<!--  the password to connect to the execution server console               -->	
+	<property name="deploy.pwd"  		value="resAdmin" /> 
+<!--  the ruleset name                                                      -->
+	<property name="ruleset.name"  		value="PreTradeChecks" />
+<!--  the ruleset archive name                                              -->	
+	<property name="ruleset.archive"  	value="${ruleset.name}.dsar" />
+<!--  the ruleapp name                                                      -->		
+	<property name="ruleapp.name"  		value="${ruleset.name}RuleApp" />
+<!--  the web application name for the execution server console             -->	
+	<property name="deploy.webapp"  	value="res" /> 
+<!--  The merge policy is used by the server to process the RuleApp archive -->
+	<property name="deploy.policy"  	value="REPLACE_MERGING_POLICY" />
+	<property name="executionserver.tools.classpath" refid="executionserver.tools.classpath"/>
+	
+	<taskdef resource="res-tasks.properties" classpath="${executionserver.tools.classpath}"/>
+
+	<!-- Check build command is installed -->
+	<target name="checkBuildCommandInstalled">
+		<available file="${ds.home}/buildcommand/rules-compiler/rules-compiler.jar" type="file" property="buildCommandInstalled"/>
+	</target>	
+	
+	<target name="abortIfNoBuildCommand" depends="checkBuildCommandInstalled" unless="buildCommandInstalled">
+		<fail message="Install Build Command feature to run this sample"/>
+	</target>
+
+	<!-- Use build command to build the PreTradeChecks decision service ruleapp -->
+	<target name="build.app" depends="init, abortIfNoBuildCommand" >
+		<!-- Build the ruleapp with build command -->
+		<java jar="${ds.home}/buildcommand/rules-compiler/rules-compiler.jar" fork="true">	  
+		    <arg line="-config ${executionserver.home}/samples/decisionservice/PreTradeChecks.properties"/>	  	
+		</java>			
+	</target>	
+
+	<!--  Deploy the ruleapp to the execution server                                                          -->    
+	<target name="ruleapp.deploy"  depends="build.app">
+		<res-deploy 
+			userid="${deploy.user}" 
+			password="${deploy.pwd}"
+			portnumber="${server.port}" 
+			hostname="localhost"
+			webapp="${deploy.webapp}"
+			mergingpolicy="${deploy.policy}" 
+			file="${output}/${ruleapp.name}.jar" >
+		</res-deploy>
+	 </target>
+</project>

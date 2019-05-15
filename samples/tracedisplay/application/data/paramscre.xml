@@ -1,0 +1,15 @@
+<!-- Licensed Materials - Property of IBM                           -->
+<!-- 5725-B69 5655-Y17                                              -->
+<!-- Copyright IBM Corp. 2013, 2018. All Rights Reserved            -->
+<!-- US Government Users Restricted Rights - Use, duplication or    -->
+<!-- disclosure restricted by GSA ADP Schedule Contract with        -->
+<!-- IBM Corp.                                                      -->
+<par:borrower>
+   <creditScore>600</creditScore>
+   <yearlyIncome>100000</yearlyIncome>
+</par:borrower>
+<par:loan>
+   <amount>100000</amount>
+   <loanToValue>0.7</loanToValue>
+   <numberOfMonthlyPayments>72</numberOfMonthlyPayments>
+</par:loan>

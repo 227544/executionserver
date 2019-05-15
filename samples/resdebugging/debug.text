@@ -1,0 +1,48 @@
+{
+  "loan": {
+   "numberOfMonthlyPayments": 72,
+   "startDate": "2016-10-19T17:27:14.000+0000",
+   "amount": 100000,
+   "loanToValue": 0.7
+     },
+  "borrower": {
+   "firstName": "Joe",
+   "lastName": "Doe",
+   "birth": "1987-09-29T01:49:45.000+0000",
+   "SSN": {
+     "areaNumber": "424",
+     "groupCode": "56",
+     "serialNumber": "7942"
+    },
+    "yearlyIncome": 100000,
+    "zipCode": "95372",
+    "creditScore": 600
+  },
+  "__TraceFilter__": {
+    "infoRulesetProperties": false,
+    "infoOutputString": false,
+    "infoInputParameters": false,
+    "infoOutputParameters": false,
+    "none": true,
+    "infoExecutionEventsAsked": false,
+    "workingMemoryFilter": "string",
+    "infoBoundObjectByRule": false,
+    "infoExecutionDuration": false,
+    "infoExecutionDate": false,
+    "infoExecutionEvents": false,
+    "infoInetAddress": false,
+    "infoRules": false,
+    "infoRulesNotFired": false,
+    "infoSystemProperties": false,
+    "infoTasks": false,
+    "infoTasksNotExecuted": false,
+    "infoTotalRulesFired": false,
+    "infoTotalRulesNotFired": false,
+    "infoTotalTasksExecuted": false,
+    "infoTotalTasksNotExecuted": false,
+    "infoWorkingMemory": false,
+    "infoRulesFired": false,
+    "infoTasksExecuted": true,
+    "infoBoundObjectSerializationType": "ClassName"
+  }
+}

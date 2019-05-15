@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry including="**/*.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/jrules-engine.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/jrules-res-execution.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/loan-validation-xom"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/bcel-5.1.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/jdom-1.1.2.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/j2ee_connector-1_5-fr.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/mina-core-2.0.1-IBM.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/slf4j-simple-1.5.8.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/openxml4j-beta.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/poi-3.10.1.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/poi-ooxml-3.10.1.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/poi-ooxml-schemas-3.10.1.jar"/>
+	<classpathentry kind="var" path="ILOG_EXECUTION_SERVER_HOME/lib/dom4j-1.6.1.jar"/>
+
+	<classpathentry kind="output" path="classes"/>
+</classpath>

@@ -1,0 +1,448 @@
+---
+swagger: "2.0"
+info:
+  description: "API to invoke the execution of the decision service operation PreTradeChecks."
+  version: "1.0.0"
+  title: "PreTradeChecks API"
+host: "localhost:9090"
+basePath: "/DecisionService/rest"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /PreTradeChecksRuleApp/1.0/PreTradeChecks/1.0:
+    post:
+      summary: "Invokes the execution of the decision service operation PreTradeChecks."
+      description: "Executes the decision service operation PreTradeChecks with the\
+        \ path /PreTradeChecksRuleApp/1.0/PreTradeChecks/1.0."
+      operationId: "callPreTradeChecksDecisionServiceOperation"
+      parameters:
+      - in: "body"
+        name: "Request"
+        description: "Request for the execution of the decision service operation.\
+          \ Contains notably the input parameters that are used for the execution."
+        required: true
+        schema:
+          $ref: "#/definitions/Request"
+      responses:
+        200:
+          description: "Response for the execution of the decision service operation.\
+            \ Contains notably the output parameters that are returned by the execution."
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: "Error occurring when invoking the execution of the decision\
+            \ service operation."
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  Order:
+    type: "object"
+    required:
+    - "action"
+    - "currency"
+    - "dateTime"
+    - "reasons"
+    - "sector"
+    - "securityType"
+    - "status"
+    properties:
+      id:
+        type: "string"
+      stock:
+        type: "string"
+      amount:
+        type: "integer"
+        format: "int32"
+      exchange:
+        type: "string"
+      currency:
+        type: "string"
+        enum:
+        - "USDollar"
+        - "Euro"
+        - "Pound"
+        - "JPRen"
+        - "PRCRMB"
+        - "SGDollar"
+      destination:
+        type: "string"
+      action:
+        type: "string"
+        enum:
+        - "Buy"
+        - "Sell"
+      securityType:
+        type: "string"
+        enum:
+        - "Bonds"
+        - "Futures"
+        - "Stock"
+      dateTime:
+        type: "string"
+        format: "date-time"
+      sector:
+        type: "string"
+        enum:
+        - "Tech"
+        - "Oil"
+        - "Rail"
+        - "Bank"
+      status:
+        type: "string"
+        enum:
+        - "Accepted"
+        - "Rejected"
+        - "Pending"
+        - "Blocked"
+      reasons:
+        type: "string"
+        enum:
+        - "CustomerPreferences"
+        - "BlackListStocks"
+        - "BadClient"
+  Tasks:
+    type: "object"
+    properties:
+      taskInformation:
+        type: "array"
+        items:
+          $ref: "#/definitions/ArtifactInformation"
+  decisionTrace:
+    type: "object"
+    properties:
+      decisionId:
+        type: "string"
+      requestedRulesetPath:
+        type: "string"
+      executedRulesetPath:
+        type: "string"
+      executionDate:
+        type: "string"
+        format: "date-time"
+      executionDuration:
+        type: "integer"
+      rulesetProperties:
+        $ref: "#/definitions/Properties"
+      systemProperties:
+        $ref: "#/definitions/Properties"
+      inetAddress:
+        type: "string"
+      totalRules:
+        type: "integer"
+      totalRulesFired:
+        type: "integer"
+      totalRulesNotFired:
+        type: "integer"
+      rules:
+        $ref: "#/definitions/Rules"
+      rulesFired:
+        $ref: "#/definitions/Rules"
+      rulesNotFired:
+        $ref: "#/definitions/Rules"
+      totalTasks:
+        type: "integer"
+      totalTasksExecuted:
+        type: "integer"
+      totalTasksNotExecuted:
+        type: "integer"
+      tasks:
+        $ref: "#/definitions/Tasks"
+      tasksExecuted:
+        $ref: "#/definitions/Tasks"
+      tasksNotExecuted:
+        $ref: "#/definitions/Tasks"
+      outputString:
+        type: "string"
+      inputParameters:
+        type: "object"
+        additionalProperties:
+          type: "object"
+      outputParameters:
+        type: "object"
+        additionalProperties:
+          type: "object"
+      workingMemory:
+        $ref: "#/definitions/DataObjects"
+      executionEvents:
+        $ref: "#/definitions/ExecutionEvents"
+    description: "Trace for the execution of the decision service operation. Contains\
+      \ execution details. The information returned in the trace depends on the trace\
+      \ filter set in the request."
+    xml:
+      name: "decisionTrace"
+  Customer:
+    type: "object"
+    required:
+    - "currency"
+    properties:
+      name:
+        type: "string"
+      owner:
+        type: "string"
+      initialValue:
+        type: "number"
+        format: "float"
+      currentValue:
+        type: "number"
+        format: "float"
+      sectorPosition:
+        type: "number"
+        format: "float"
+      bankStockPosition:
+        type: "number"
+        format: "float"
+      oilStockPosition:
+        type: "number"
+        format: "float"
+      railStockPosition:
+        type: "number"
+        format: "float"
+      bondPosition:
+        type: "number"
+        format: "float"
+      futurPosition:
+        type: "number"
+        format: "float"
+      stockPosition:
+        type: "number"
+        format: "float"
+      currency:
+        type: "string"
+        enum:
+        - "USDollar"
+        - "Euro"
+        - "Pound"
+        - "JPRen"
+        - "PRCRMB"
+        - "SGDollar"
+  Request:
+    type: "object"
+    properties:
+      __DecisionID__:
+        type: "string"
+        description: "Unique identifier representing the execution of the decision\
+          \ service operation. If it is not specified, it will be computed automatically."
+      __TraceFilter__:
+        $ref: "#/definitions/TraceFilter"
+      customerParameter:
+        $ref: "#/definitions/Customer"
+      orderParameter:
+        $ref: "#/definitions/Order"
+    description: "Request for the execution of the decision service operation. Contains\
+      \ notably the input parameters that are used for the execution."
+  ExecutionEvents:
+    type: "object"
+    properties:
+      taskEvent:
+        type: "array"
+        items:
+          $ref: "#/definitions/TaskEvent"
+      ruleEvent:
+        type: "array"
+        items:
+          $ref: "#/definitions/RuleEvent"
+  Error:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+        description: "HTTP error code."
+      message:
+        type: "string"
+        description: "Error message."
+    description: "Error occurring when invoking the execution of the decision service\
+      \ operation."
+  Properties:
+    type: "object"
+    properties:
+      property:
+        type: "array"
+        items:
+          $ref: "#/definitions/Property"
+  RuleEvent:
+    type: "object"
+    required:
+    - "endDate"
+    - "priority"
+    - "ruleInformation"
+    - "startDate"
+    properties:
+      startDate:
+        type: "string"
+        format: "date-time"
+      priority:
+        type: "integer"
+      ruleInformation:
+        $ref: "#/definitions/ArtifactInformation"
+      boundObjects:
+        $ref: "#/definitions/DataObjects"
+      endDate:
+        type: "string"
+        format: "date-time"
+  Rules:
+    type: "object"
+    properties:
+      ruleInformation:
+        type: "array"
+        items:
+          $ref: "#/definitions/ArtifactInformation"
+  Response:
+    type: "object"
+    properties:
+      __DecisionID__:
+        type: "string"
+        description: "Unique identifier representing the execution of the decision\
+          \ service operation. If it is not specified, it will be computed automatically."
+      __decisionTrace__:
+        $ref: "#/definitions/decisionTrace"
+      reportParameter:
+        $ref: "#/definitions/Order"
+    description: "Response for the execution of the decision service operation. Contains\
+      \ notably the output parameters that are returned by the execution."
+  DataObject:
+    type: "object"
+    properties:
+      content:
+        type: "array"
+        items:
+          type: "object"
+      serializer:
+        type: "string"
+        xml:
+          attribute: true
+  TaskEvent:
+    type: "object"
+    required:
+    - "endDate"
+    - "executionEvents"
+    - "startDate"
+    - "taskInformation"
+    properties:
+      startDate:
+        type: "string"
+        format: "date-time"
+      taskInformation:
+        $ref: "#/definitions/ArtifactInformation"
+      executionEvents:
+        $ref: "#/definitions/ExecutionEvents"
+      endDate:
+        type: "string"
+        format: "date-time"
+  TraceFilter:
+    type: "object"
+    properties:
+      infoRulesetProperties:
+        type: "boolean"
+        default: false
+      infoOutputString:
+        type: "boolean"
+        default: false
+      infoInputParameters:
+        type: "boolean"
+        default: false
+      infoOutputParameters:
+        type: "boolean"
+        default: false
+      none:
+        type: "boolean"
+        default: false
+      infoExecutionEventsAsked:
+        type: "boolean"
+        default: false
+      workingMemoryFilter:
+        type: "string"
+      infoBoundObjectByRule:
+        type: "boolean"
+        default: false
+      infoExecutionDuration:
+        type: "boolean"
+        default: false
+      infoExecutionDate:
+        type: "boolean"
+        default: false
+      infoExecutionEvents:
+        type: "boolean"
+        default: false
+      infoInetAddress:
+        type: "boolean"
+        default: false
+      infoRules:
+        type: "boolean"
+        default: false
+      infoRulesNotFired:
+        type: "boolean"
+        default: false
+      infoSystemProperties:
+        type: "boolean"
+        default: false
+      infoTasks:
+        type: "boolean"
+        default: false
+      infoTasksNotExecuted:
+        type: "boolean"
+        default: false
+      infoTotalRulesFired:
+        type: "boolean"
+        default: false
+      infoTotalRulesNotFired:
+        type: "boolean"
+        default: false
+      infoTotalTasksExecuted:
+        type: "boolean"
+        default: false
+      infoTotalTasksNotExecuted:
+        type: "boolean"
+        default: false
+      infoWorkingMemory:
+        type: "boolean"
+        default: false
+      infoRulesFired:
+        type: "boolean"
+        default: false
+      infoTasksExecuted:
+        type: "boolean"
+        default: false
+      infoBoundObjectSerializationType:
+        type: "string"
+        enum:
+        - "JAXB"
+        - "ToString"
+        - "ClassName"
+    description: "Trace filter for the execution of the decision service operation.\
+      \ Allows to determine the execution details that should be extracted and returned\
+      \ in the response."
+  ArtifactInformation:
+    type: "object"
+    required:
+    - "businessName"
+    - "name"
+    properties:
+      name:
+        type: "string"
+      businessName:
+        type: "string"
+      properties:
+        $ref: "#/definitions/Properties"
+  Property:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      value:
+        type: "string"
+      name:
+        type: "string"
+        xml:
+          attribute: true
+  DataObjects:
+    type: "object"
+    properties:
+      object:
+        type: "array"
+        items:
+          $ref: "#/definitions/DataObject"

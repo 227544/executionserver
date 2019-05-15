@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model.brl:ActionRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model.brl="http://ilog.rules.studio/model/brl.ecore">
+  <name>neverBankruptcy</name>
+  <uuid>fc221907-08fc-4747-b9ec-b5a8210bc6a0</uuid>
+  <status>new</status>
+  <locale>en_US</locale>
+  <priority></priority>
+  <definition><![CDATA[if 
+    it is not true that 'the borrower' has filed a bankruptcy 
+then 
+    add 20 to the corporate score in 'the loan report';
+]]></definition>
+</model.brl:ActionRule>
